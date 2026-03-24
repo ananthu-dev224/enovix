@@ -81,22 +81,20 @@ export default function Navbar() {
               style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}
             >
               <div style={{
-                width: '42px',
-                height: '42px',
+                width: 'auto',
+                height: 'auto',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '18px',
                 fontFamily: 'Syne, sans-serif',
                 fontWeight: '800',
-                paddingLeft: '50px'
               }}>
-                  <Image
+              <Image
                 src="/enovix_logo.png"
                 alt="Enovix"
                 width={140}
-                height={0}
-                style={{ height: "auto" }}
+                height={40} 
               />
               </div>
             </motion.div>

@@ -29,7 +29,7 @@ export default function Hero() {
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden',
-        paddingTop: '80px',
+        paddingTop: '120px',
       }}
     >
       {/* Ambient orbs */}
