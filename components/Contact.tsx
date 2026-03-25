@@ -9,7 +9,6 @@ import {
   Send,
   CheckCircle2,
   AlertCircle,
-  Globe,
   MessageSquare,
   Briefcase,
 } from 'lucide-react';
@@ -45,8 +44,14 @@ const contactInfo = [
   },
 ];
 
-const services = ['Web Development', 'Android Development', 'iOS Development', 'Full-Stack Solution', 'Other'];
-const budgets = ['< ₹50K', '₹50K – ₹1.5L', '₹1.5L – ₹5L', '₹5L+', 'Let\'s Discuss'];
+const serviceOptions = [
+  'Web Development',
+  'Android Development',
+  'iOS Development',
+  'Full-Stack Solution',
+  'Other',
+];
+const budgetOptions = ['< ₹50K', '₹50K – ₹1.5L', '₹1.5L – ₹5L', '₹5L+', "Let's Discuss"];
 
 type FormData = {
   name: string;
@@ -58,6 +63,13 @@ type FormData = {
 };
 
 type FormStatus = 'idle' | 'sending' | 'success' | 'error';
+
+function hexToRgb(hex: string) {
+  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return r
+    ? `${parseInt(r[1], 16)}, ${parseInt(r[2], 16)}, ${parseInt(r[3], 16)}`
+    : '255,255,255';
+}
 
 export default function Contact() {
   const headingRef = useRef(null);
@@ -72,22 +84,44 @@ export default function Contact() {
     message: '',
   });
   const [status, setStatus] = useState<FormStatus>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const update = (field: keyof FormData, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
+  // ── Calls /api/contact → Nodemailer → Gmail ──────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
-    // Simulate API call — replace with your actual endpoint
-    await new Promise((r) => setTimeout(r, 1800));
-    setStatus('success');
-    // Reset after 5s
-    setTimeout(() => {
-      setStatus('idle');
-      setForm({ name: '', email: '', company: '', service: '', budget: '', message: '' });
-    }, 5000);
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(data.error || 'Something went wrong. Please try again.');
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 5000);
+        return;
+      }
+
+      setStatus('success');
+      setTimeout(() => {
+        setStatus('idle');
+        setForm({ name: '', email: '', company: '', service: '', budget: '', message: '' });
+      }, 6000);
+    } catch {
+      setErrorMsg('Network error. Please check your connection and try again.');
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 5000);
+    }
   };
 
   const inputStyle = (field: string): React.CSSProperties => ({
@@ -122,13 +156,10 @@ export default function Contact() {
 
   return (
     <section id="contact" style={{ padding: '120px 0 0', position: 'relative', overflow: 'hidden' }}>
-      {/* Background */}
       <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: 'linear-gradient(rgba(42, 137, 232, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(42, 137, 232, 0.03) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
-        pointerEvents: 'none',
+        position: 'absolute', inset: 0,
+        backgroundImage: 'linear-gradient(rgba(42,137,232,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(42,137,232,0.03) 1px, transparent 1px)',
+        backgroundSize: '60px 60px', pointerEvents: 'none',
       }} />
       <div className="orb orb-blue" style={{ width: '600px', height: '600px', bottom: '0', right: '-200px', opacity: 0.35 }} />
       <div className="orb orb-cyan" style={{ width: '400px', height: '400px', top: '100px', left: '-100px', opacity: 0.2 }} />
@@ -149,47 +180,28 @@ export default function Contact() {
           <h2 style={{
             fontFamily: 'Syne, sans-serif',
             fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
-            fontWeight: '800',
-            lineHeight: 1.1,
-            letterSpacing: '-0.03em',
-            color: 'var(--text-primary)',
-            marginBottom: '16px',
+            fontWeight: '800', lineHeight: 1.1,
+            letterSpacing: '-0.03em', color: 'var(--text-primary)', marginBottom: '16px',
           }}>
             Start Your{' '}
             <span style={{
               background: 'linear-gradient(135deg, #2889e8, #00d4ff)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>
-              Project
-            </span>{' '}
-            With Us
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+            }}>Project</span>{' '}With Us
           </h2>
           <p style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '1rem',
-            fontWeight: '300',
-            color: 'var(--text-secondary)',
-            maxWidth: '480px',
-            margin: '0 auto',
-            lineHeight: 1.7,
+            fontFamily: 'DM Sans, sans-serif', fontSize: '1rem', fontWeight: '300',
+            color: 'var(--text-secondary)', maxWidth: '480px', margin: '0 auto', lineHeight: 1.7,
           }}>
             Tell us about your idea and we&apos;ll get back to you within 24 hours with a plan.
           </p>
         </motion.div>
 
-        {/* Two-column layout */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1.6fr',
-          gap: '32px',
-          alignItems: 'start',
-        }}
-          className="contact-grid"
-        >
+        {/* Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '32px', alignItems: 'start' }}
+          className="contact-grid">
 
-          {/* Left — Info panel */}
+          {/* ── Left info column ── */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -197,64 +209,38 @@ export default function Contact() {
             transition={{ duration: 0.7 }}
             style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
           >
-            {/* Contact info cards */}
             {contactInfo.map((item, i) => {
               const Icon = item.icon;
               return (
-                <motion.a
-                  key={item.label}
-                  href={item.href}
+                <motion.a key={item.label} href={item.href}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
                   whileHover={{ x: 4 }}
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    padding: '20px 22px',
-                    borderRadius: '12px',
-                    background: 'rgba(4, 20, 40, 0.6)',
-                    border: '1px solid rgba(42, 137, 232, 0.12)',
-                    textDecoration: 'none',
-                    backdropFilter: 'blur(8px)',
-                    transition: 'border-color 0.25s',
+                    display: 'flex', alignItems: 'center', gap: '16px',
+                    padding: '20px 22px', borderRadius: '12px',
+                    background: 'rgba(4,20,40,0.6)', border: '1px solid rgba(42,137,232,0.12)',
+                    textDecoration: 'none', backdropFilter: 'blur(8px)', transition: 'border-color 0.25s',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.borderColor = `rgba(0,212,255,0.25)`)}
+                  onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(0,212,255,0.25)')}
                   onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(42,137,232,0.12)')}
                 >
                   <div style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: '10px',
+                    width: '42px', height: '42px', borderRadius: '10px', flexShrink: 0,
                     background: `rgba(${hexToRgb(item.color)}, 0.1)`,
                     border: `1px solid rgba(${hexToRgb(item.color)}, 0.2)`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     <Icon size={18} color={item.color} strokeWidth={1.5} />
                   </div>
                   <div>
                     <div style={{
-                      fontFamily: 'DM Sans, sans-serif',
-                      fontSize: '0.7rem',
-                      fontWeight: '500',
-                      color: 'var(--text-muted)',
-                      letterSpacing: '0.1em',
-                      textTransform: 'uppercase',
-                      marginBottom: '3px',
-                    }}>
-                      {item.label}
-                    </div>
-                    <div style={{
-                      fontFamily: 'Syne, sans-serif',
-                      fontSize: '0.92rem',
-                      fontWeight: '600',
-                      color: 'var(--text-primary)',
-                    }}>
+                      fontFamily: 'DM Sans, sans-serif', fontSize: '0.7rem', fontWeight: '500',
+                      color: 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '3px',
+                    }}>{item.label}</div>
+                    <div style={{ fontFamily: 'Syne, sans-serif', fontSize: '0.92rem', fontWeight: '600', color: 'var(--text-primary)' }}>
                       {item.value}
                     </div>
                   </div>
@@ -262,69 +248,40 @@ export default function Contact() {
               );
             })}
 
-            {/* Response time badge */}
+            {/* Availability */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
+              initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: 0.4 }}
               style={{
-                padding: '20px 22px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.06), rgba(40, 137, 232, 0.04))',
-                border: '1px solid rgba(0, 212, 255, 0.15)',
+                padding: '20px 22px', borderRadius: '12px',
+                background: 'linear-gradient(135deg, rgba(0,212,255,0.06), rgba(40,137,232,0.04))',
+                border: '1px solid rgba(0,212,255,0.15)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                 <div style={{
-                  width: '8px', height: '8px', borderRadius: '50%',
-                  background: '#3ddc84',
-                  boxShadow: '0 0 8px rgba(61,220,132,0.6)',
-                  animation: 'pulse-dot 2s infinite',
+                  width: '8px', height: '8px', borderRadius: '50%', background: '#3ddc84',
+                  boxShadow: '0 0 8px rgba(61,220,132,0.6)', animation: 'pulse-dot 2s infinite',
                 }} />
                 <span style={{
-                  fontFamily: 'DM Sans, sans-serif',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  color: '#3ddc84',
-                  letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
-                }}>
-                  Available for Projects
-                </span>
+                  fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', fontWeight: '500',
+                  color: '#3ddc84', letterSpacing: '0.1em', textTransform: 'uppercase',
+                }}>Available for Projects</span>
               </div>
-              <p style={{
-                fontFamily: 'DM Sans, sans-serif',
-                fontSize: '0.84rem',
-                fontWeight: '300',
-                color: 'var(--text-secondary)',
-                lineHeight: 1.6,
-              }}>
-                We typically respond within <strong style={{ color: 'var(--text-primary)', fontWeight: '500' }}>24 hours</strong>. Free consultation included with every enquiry.
+              <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.84rem', fontWeight: '300', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                We typically respond within{' '}
+                <strong style={{ color: 'var(--text-primary)', fontWeight: '500' }}>24 hours</strong>.
+                Free consultation with every enquiry.
               </p>
             </motion.div>
 
-            {/* What to expect */}
+            {/* Next steps */}
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              style={{
-                padding: '22px',
-                borderRadius: '12px',
-                background: 'rgba(4, 20, 40, 0.5)',
-                border: '1px solid rgba(42, 137, 232, 0.1)',
-              }}
+              initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ delay: 0.5 }}
+              style={{ padding: '22px', borderRadius: '12px', background: 'rgba(4,20,40,0.5)', border: '1px solid rgba(42,137,232,0.1)' }}
             >
-              <div style={{
-                fontFamily: 'Syne, sans-serif',
-                fontSize: '0.85rem',
-                fontWeight: '700',
-                color: 'var(--text-primary)',
-                marginBottom: '14px',
-                letterSpacing: '-0.01em',
-              }}>
+              <div style={{ fontFamily: 'Syne, sans-serif', fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '14px' }}>
                 What happens next?
               </div>
               {[
@@ -336,26 +293,13 @@ export default function Contact() {
                 return (
                   <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: i < 2 ? '12px' : 0 }}>
                     <div style={{
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '7px',
-                      background: 'rgba(40, 137, 232, 0.1)',
-                      border: '1px solid rgba(40, 137, 232, 0.15)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      marginTop: '1px',
+                      width: '28px', height: '28px', borderRadius: '7px', flexShrink: 0, marginTop: '1px',
+                      background: 'rgba(40,137,232,0.1)', border: '1px solid rgba(40,137,232,0.15)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
                       <Icon size={13} color="var(--blue-bright)" strokeWidth={1.5} />
                     </div>
-                    <span style={{
-                      fontFamily: 'DM Sans, sans-serif',
-                      fontSize: '0.83rem',
-                      fontWeight: '300',
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1.5,
-                    }}>
+                    <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.83rem', fontWeight: '300', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                       {step.text}
                     </span>
                   </div>
@@ -364,254 +308,147 @@ export default function Contact() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Form */}
+          {/* ── Right form column ── */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.7 }}
             style={{
-              padding: '44px 44px',
-              borderRadius: '20px',
-              background: 'rgba(4, 20, 40, 0.75)',
-              border: '1px solid rgba(42, 137, 232, 0.15)',
-              backdropFilter: 'blur(16px)',
-              position: 'relative',
-              overflow: 'hidden',
+              padding: '44px', borderRadius: '20px',
+              background: 'rgba(4,20,40,0.75)', border: '1px solid rgba(42,137,232,0.15)',
+              backdropFilter: 'blur(16px)', position: 'relative', overflow: 'hidden',
             }}
           >
-            {/* Top accent line */}
             <div style={{
-              position: 'absolute',
-              top: 0,
-              left: '10%',
-              right: '10%',
-              height: '1px',
+              position: 'absolute', top: 0, left: '10%', right: '10%', height: '1px',
               background: 'linear-gradient(90deg, transparent, rgba(0,212,255,0.4), transparent)',
             }} />
 
-            {status === 'success' ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                style={{ textAlign: 'center', padding: '40px 0' }}
-              >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+            {/* Success */}
+            {status === 'success' && (
+              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+                style={{ textAlign: 'center', padding: '40px 0' }}>
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
                   transition={{ type: 'spring', stiffness: 200, delay: 0.1 }}
-                  style={{ display: 'inline-flex', marginBottom: '24px' }}
-                >
+                  style={{ display: 'inline-flex', marginBottom: '24px' }}>
                   <CheckCircle2 size={64} color="#3ddc84" strokeWidth={1.2} />
                 </motion.div>
-                <h3 style={{
-                  fontFamily: 'Syne, sans-serif',
-                  fontSize: '1.6rem',
-                  fontWeight: '700',
-                  color: 'var(--text-primary)',
-                  marginBottom: '12px',
-                }}>
+                <h3 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.6rem', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '12px' }}>
                   Message Sent!
                 </h3>
-                <p style={{
-                  fontFamily: 'DM Sans, sans-serif',
-                  fontSize: '0.95rem',
-                  fontWeight: '300',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.7,
-                }}>
-                  Thanks for reaching out. We&apos;ll get back to you within 24 hours.
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.95rem', fontWeight: '300', color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                  Check your inbox — we&apos;ve sent you a confirmation. We&apos;ll be in touch within 24 hours.
                 </p>
               </motion.div>
-            ) : (
+            )}
+
+            {/* Error banner */}
+            {status === 'error' && (
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                style={{
+                  display: 'flex', alignItems: 'flex-start', gap: '12px',
+                  padding: '14px 18px', borderRadius: '10px', marginBottom: '24px',
+                  background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)',
+                }}>
+                <AlertCircle size={18} color="#f87171" style={{ flexShrink: 0, marginTop: '1px' }} />
+                <p style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.88rem', color: '#f87171', margin: 0, lineHeight: 1.5 }}>
+                  {errorMsg}
+                </p>
+              </motion.div>
+            )}
+
+            {/* Form — hidden once success */}
+            {status !== 'success' && (
               <form onSubmit={handleSubmit}>
-                {/* Row 1 */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}
-                  className="form-row">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }} className="form-row">
                   <div>
                     <label style={labelStyle}>Your Name *</label>
-                    <input
-                      type="text"
-                      required
-                      value={form.name}
+                    <input type="text" required value={form.name}
                       onChange={e => update('name', e.target.value)}
-                      onFocus={() => setFocusedField('name')}
-                      onBlur={() => setFocusedField(null)}
-                      placeholder="John Doe"
-                      style={inputStyle('name')}
-                    />
+                      onFocus={() => setFocusedField('name')} onBlur={() => setFocusedField(null)}
+                      placeholder="John Doe" style={inputStyle('name')} />
                   </div>
                   <div>
                     <label style={labelStyle}>Email Address *</label>
-                    <input
-                      type="email"
-                      required
-                      value={form.email}
+                    <input type="email" required value={form.email}
                       onChange={e => update('email', e.target.value)}
-                      onFocus={() => setFocusedField('email')}
-                      onBlur={() => setFocusedField(null)}
-                      placeholder="you@example.com"
-                      style={inputStyle('email')}
-                    />
+                      onFocus={() => setFocusedField('email')} onBlur={() => setFocusedField(null)}
+                      placeholder="you@example.com" style={inputStyle('email')} />
                   </div>
                 </div>
 
-                {/* Row 2 */}
                 <div style={{ marginBottom: '16px' }}>
                   <label style={labelStyle}>Company / Project Name</label>
-                  <input
-                    type="text"
-                    value={form.company}
+                  <input type="text" value={form.company}
                     onChange={e => update('company', e.target.value)}
-                    onFocus={() => setFocusedField('company')}
-                    onBlur={() => setFocusedField(null)}
-                    placeholder="Your company or project"
-                    style={inputStyle('company')}
-                  />
+                    onFocus={() => setFocusedField('company')} onBlur={() => setFocusedField(null)}
+                    placeholder="Your company or project" style={inputStyle('company')} />
                 </div>
 
-                {/* Row 3 — Service */}
                 <div style={{ marginBottom: '16px' }}>
-                  <label style={labelStyle}>Service Needed *</label>
+                  <label style={labelStyle}>Service Needed</label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {services.map((s) => (
-                      <button
-                        key={s}
-                        type="button"
-                        onClick={() => update('service', s)}
-                        style={{
-                          padding: '8px 16px',
-                          borderRadius: '100px',
-                          border: form.service === s
-                            ? '1px solid rgba(0,212,255,0.5)'
-                            : '1px solid rgba(42,137,232,0.15)',
-                          background: form.service === s
-                            ? 'rgba(0,212,255,0.1)'
-                            : 'rgba(255,255,255,0.02)',
-                          color: form.service === s ? 'var(--cyan-pop)' : 'var(--text-muted)',
-                          fontFamily: 'DM Sans, sans-serif',
-                          fontSize: '0.8rem',
-                          fontWeight: '500',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                        }}
-                      >
-                        {s}
-                      </button>
+                    {serviceOptions.map(s => (
+                      <button key={s} type="button" onClick={() => update('service', s)} style={{
+                        padding: '8px 16px', borderRadius: '100px', cursor: 'pointer',
+                        fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', fontWeight: '500', transition: 'all 0.2s ease',
+                        border: form.service === s ? '1px solid rgba(0,212,255,0.5)' : '1px solid rgba(42,137,232,0.15)',
+                        background: form.service === s ? 'rgba(0,212,255,0.1)' : 'rgba(255,255,255,0.02)',
+                        color: form.service === s ? 'var(--cyan-pop)' : 'var(--text-muted)',
+                      }}>{s}</button>
                     ))}
                   </div>
                 </div>
 
-                {/* Row 4 — Budget */}
                 <div style={{ marginBottom: '16px' }}>
                   <label style={labelStyle}>Budget Range</label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                    {budgets.map((b) => (
-                      <button
-                        key={b}
-                        type="button"
-                        onClick={() => update('budget', b)}
-                        style={{
-                          padding: '8px 16px',
-                          borderRadius: '100px',
-                          border: form.budget === b
-                            ? '1px solid rgba(40,137,232,0.5)'
-                            : '1px solid rgba(42,137,232,0.12)',
-                          background: form.budget === b
-                            ? 'rgba(40,137,232,0.1)'
-                            : 'rgba(255,255,255,0.02)',
-                          color: form.budget === b ? 'var(--blue-bright)' : 'var(--text-muted)',
-                          fontFamily: 'DM Sans, sans-serif',
-                          fontSize: '0.8rem',
-                          fontWeight: '500',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s ease',
-                        }}
-                      >
-                        {b}
-                      </button>
+                    {budgetOptions.map(b => (
+                      <button key={b} type="button" onClick={() => update('budget', b)} style={{
+                        padding: '8px 16px', borderRadius: '100px', cursor: 'pointer',
+                        fontFamily: 'DM Sans, sans-serif', fontSize: '0.8rem', fontWeight: '500', transition: 'all 0.2s ease',
+                        border: form.budget === b ? '1px solid rgba(40,137,232,0.5)' : '1px solid rgba(42,137,232,0.12)',
+                        background: form.budget === b ? 'rgba(40,137,232,0.1)' : 'rgba(255,255,255,0.02)',
+                        color: form.budget === b ? 'var(--blue-bright)' : 'var(--text-muted)',
+                      }}>{b}</button>
                     ))}
                   </div>
                 </div>
 
-                {/* Row 5 — Message */}
                 <div style={{ marginBottom: '28px' }}>
                   <label style={labelStyle}>Tell Us About Your Project *</label>
-                  <textarea
-                    required
-                    rows={4}
-                    value={form.message}
+                  <textarea required rows={4} value={form.message}
                     onChange={e => update('message', e.target.value)}
-                    onFocus={() => setFocusedField('message')}
-                    onBlur={() => setFocusedField(null)}
+                    onFocus={() => setFocusedField('message')} onBlur={() => setFocusedField(null)}
                     placeholder="Describe your idea, goals, and any specific requirements..."
-                    style={{
-                      ...inputStyle('message'),
-                      resize: 'vertical',
-                      minHeight: '110px',
-                    }}
-                  />
+                    style={{ ...inputStyle('message'), resize: 'vertical', minHeight: '110px' }} />
                 </div>
 
-                {/* Submit */}
-                <motion.button
-                  type="submit"
-                  disabled={status === 'sending'}
+                <motion.button type="submit" disabled={status === 'sending'}
                   whileHover={status !== 'sending' ? { scale: 1.02, y: -2 } : {}}
                   whileTap={status !== 'sending' ? { scale: 0.98 } : {}}
                   style={{
-                    width: '100%',
-                    padding: '16px 32px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    background: status === 'sending'
-                      ? 'rgba(40, 137, 232, 0.4)'
-                      : 'linear-gradient(135deg, #1a6fc4, #2889e8)',
-                    color: 'white',
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: '700',
-                    fontSize: '0.9rem',
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
+                    width: '100%', padding: '16px 32px', borderRadius: '8px', border: 'none',
+                    background: status === 'sending' ? 'rgba(40,137,232,0.4)' : 'linear-gradient(135deg, #1a6fc4, #2889e8)',
+                    color: 'white', fontFamily: 'Syne, sans-serif', fontWeight: '700',
+                    fontSize: '0.9rem', letterSpacing: '0.06em', textTransform: 'uppercase',
                     cursor: status === 'sending' ? 'not-allowed' : 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    boxShadow: '0 8px 32px rgba(0,212,255,0.2)',
-                    transition: 'all 0.3s ease',
-                  }}
-                >
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+                    boxShadow: '0 8px 32px rgba(0,212,255,0.2)', transition: 'all 0.3s ease',
+                  }}>
                   {status === 'sending' ? (
                     <>
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        style={{
-                          width: '18px',
-                          height: '18px',
-                          border: '2px solid rgba(255,255,255,0.3)',
-                          borderTopColor: 'white',
-                          borderRadius: '50%',
-                        }}
-                      />
+                      <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white' }} />
                       Sending...
                     </>
                   ) : (
-                    <>
-                      <Send size={16} />
-                      Send Message
-                    </>
+                    <><Send size={16} /> Send Message</>
                   )}
                 </motion.button>
 
-                <p style={{
-                  textAlign: 'center',
-                  marginTop: '14px',
-                  fontFamily: 'DM Sans, sans-serif',
-                  fontSize: '0.75rem',
-                  color: 'var(--text-muted)',
-                }}>
+                <p style={{ textAlign: 'center', marginTop: '14px', fontFamily: 'DM Sans, sans-serif', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                   No spam. We respect your privacy.
                 </p>
               </form>
@@ -622,24 +459,13 @@ export default function Contact() {
 
       <style>{`
         @keyframes pulse-dot {
-          0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(61,220,132,0.6); }
-          50% { opacity: 0.6; box-shadow: 0 0 14px rgba(61,220,132,0.9); }
+          0%,100% { opacity:1; box-shadow:0 0 8px rgba(61,220,132,0.6); }
+          50%      { opacity:0.6; box-shadow:0 0 14px rgba(61,220,132,0.9); }
         }
-        @media (max-width: 900px) {
-          .contact-grid { grid-template-columns: 1fr !important; }
-        }
-        @media (max-width: 560px) {
-          .form-row { grid-template-columns: 1fr !important; }
-          section#contact .contact-form-box { padding: 28px 20px !important; }
-        }
+        @media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 560px) { .form-row { grid-template-columns: 1fr !important; } }
         ::placeholder { color: rgba(138,175,212,0.35); }
-        select option { background: #020d1f; }
       `}</style>
     </section>
   );
-}
-
-function hexToRgb(hex: string) {
-  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return r ? `${parseInt(r[1], 16)}, ${parseInt(r[2], 16)}, ${parseInt(r[3], 16)}` : '255,255,255';
 }

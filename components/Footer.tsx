@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, Heart } from 'lucide-react';
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 import Image from 'next/image';
+import { a } from 'framer-motion/client';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -369,6 +370,7 @@ export default function Footer() {
                 { label: "contact.enovix@gmail.com", href: "mailto:contact.enovix@gmail.com" },
                 { label: "+91 95269 52719", href: "tel:+919526952719" },
                 { label: "+91 79940 78089", href: "tel:+917994078089" },
+                { label: "+91 99471 17079", href: "tel:+919947117079" },
                 { label: "Kerala, India", href: "" },
               ].map((item) => (
                 <a
