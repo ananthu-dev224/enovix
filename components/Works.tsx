@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import { useState, useRef } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
-const categories = ['All', 'Web', 'Android', 'iOS',];
+const categories = ["All", "Web", "Android", "iOS"];
 
 const projects = [
   {
@@ -20,6 +21,7 @@ const projects = [
     gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
     accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
     image: "/medrecq.jpg",
+    link: "https://play.google.com/store/apps/details?id=app.medrec_q.dictate"
   },
   {
     id: 2,
@@ -34,18 +36,26 @@ const projects = [
     gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
     accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
     image: "/medrecq.jpg",
+    link: "https://apps.apple.com/us/app/medrec-q-dictate/id6759154532"
   },
 ];
 
 function hexToRgb(hex: string) {
   const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return r ? `${parseInt(r[1], 16)}, ${parseInt(r[2], 16)}, ${parseInt(r[3], 16)}` : '255,255,255';
+  return r
+    ? `${parseInt(r[1], 16)}, ${parseInt(r[2], 16)}, ${parseInt(r[3], 16)}`
+    : "255,255,255";
 }
 
-
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: (typeof projects)[0];
+  index: number;
+}) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -197,23 +207,26 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           >
             {project.title}
           </h3>
-          <motion.div
-            animate={{ rotate: hovered ? 45 : 0, scale: hovered ? 1.1 : 1 }}
-            transition={{ duration: 0.25 }}
-            style={{
-              width: "32px",
-              height: "32px",
-              borderRadius: "8px",
-              background: `rgba(${hexToRgb(project.color)}, 0.1)`,
-              border: `1px solid rgba(${hexToRgb(project.color)}, 0.25)`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <ArrowUpRight size={15} color={project.color} />
-          </motion.div>
+          <Link href={project.link || "#"} target="_blank">
+            <motion.div
+              animate={{ rotate: hovered ? 45 : 0, scale: hovered ? 1.1 : 1 }}
+              transition={{ duration: 0.25 }}
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "8px",
+                background: `rgba(${hexToRgb(project.color)}, 0.1)`,
+                border: `1px solid rgba(${hexToRgb(project.color)}, 0.25)`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                cursor: "pointer",
+              }}
+            >
+              <ArrowUpRight size={15} color={project.color} />
+            </motion.div>
+          </Link>
         </div>
 
         {/* Description */}
@@ -271,92 +284,121 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 }
 
 export default function Works() {
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeFilter, setActiveFilter] = useState("All");
   const headingRef = useRef(null);
-  const headingInView = useInView(headingRef, { once: true, margin: '-80px' });
+  const headingInView = useInView(headingRef, { once: true, margin: "-80px" });
 
-  const filtered = activeFilter === 'All'
-    ? projects
-    : projects.filter((p) => p.category === activeFilter);
+  const filtered =
+    activeFilter === "All"
+      ? projects
+      : projects.filter((p) => p.category === activeFilter);
 
   return (
-    <section id="works" style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+    <section
+      id="works"
+      style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}
+    >
       {/* Bg decoration */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        backgroundImage: 'linear-gradient(rgba(42, 137, 232, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(42, 137, 232, 0.03) 1px, transparent 1px)',
-        backgroundSize: '60px 60px',
-        pointerEvents: 'none',
-      }} />
-      <div className="orb orb-blue" style={{ width: '600px', height: '600px', top: '50px', left: '-200px', opacity: 0.3 }} />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage:
+            "linear-gradient(rgba(42, 137, 232, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(42, 137, 232, 0.03) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        className="orb orb-blue"
+        style={{
+          width: "600px",
+          height: "600px",
+          top: "50px",
+          left: "-200px",
+          opacity: 0.3,
+        }}
+      />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 32px' }}>
-
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}>
         {/* Header */}
         <motion.div
           ref={headingRef}
           initial={{ opacity: 0, y: 30 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          style={{ marginBottom: '56px' }}
+          style={{ marginBottom: "56px" }}
         >
-          <div className="section-label" style={{ marginBottom: '20px' }}>Our Work</div>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            flexWrap: 'wrap',
-            gap: '28px',
-          }}>
-            <h2 style={{
-              fontFamily: 'Syne, sans-serif',
-              fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
-              fontWeight: '800',
-              lineHeight: 1.1,
-              letterSpacing: '-0.03em',
-              color: 'var(--text-primary)',
-            }}>
-              Previous{' '}
-              <span style={{
-                background: 'linear-gradient(135deg, #2889e8, #00d4ff)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}>
+          <div className="section-label" style={{ marginBottom: "20px" }}>
+            Our Work
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+              flexWrap: "wrap",
+              gap: "28px",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "Syne, sans-serif",
+                fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
+                fontWeight: "800",
+                lineHeight: 1.1,
+                letterSpacing: "-0.03em",
+                color: "var(--text-primary)",
+              }}
+            >
+              Previous{" "}
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #2889e8, #00d4ff)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
                 Works
               </span>
             </h2>
 
             {/* Filter tabs */}
-            <div style={{
-              display: 'flex',
-              gap: '6px',
-              padding: '5px',
-              borderRadius: '10px',
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(42,137,232,0.12)',
-            }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "6px",
+                padding: "5px",
+                borderRadius: "10px",
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(42,137,232,0.12)",
+              }}
+            >
               {categories.map((cat) => (
                 <motion.button
                   key={cat}
                   onClick={() => setActiveFilter(cat)}
                   whileTap={{ scale: 0.96 }}
                   style={{
-                    padding: '8px 18px',
-                    borderRadius: '7px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: '600',
-                    fontSize: '0.8rem',
-                    letterSpacing: '0.04em',
-                    transition: 'all 0.25s ease',
-                    background: activeFilter === cat
-                      ? 'linear-gradient(135deg, #1a6fc4, #2889e8)'
-                      : 'transparent',
-                    color: activeFilter === cat ? 'white' : 'var(--text-muted)',
-                    boxShadow: activeFilter === cat ? '0 4px 16px rgba(0,212,255,0.2)' : 'none',
+                    padding: "8px 18px",
+                    borderRadius: "7px",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "Syne, sans-serif",
+                    fontWeight: "600",
+                    fontSize: "0.8rem",
+                    letterSpacing: "0.04em",
+                    transition: "all 0.25s ease",
+                    background:
+                      activeFilter === cat
+                        ? "linear-gradient(135deg, #1a6fc4, #2889e8)"
+                        : "transparent",
+                    color: activeFilter === cat ? "white" : "var(--text-muted)",
+                    boxShadow:
+                      activeFilter === cat
+                        ? "0 4px 16px rgba(0,212,255,0.2)"
+                        : "none",
                   }}
                 >
                   {cat}
@@ -370,9 +412,9 @@ export default function Works() {
         <motion.div
           layout
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: '24px',
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+            gap: "24px",
           }}
         >
           <AnimatePresence mode="popLayout">
@@ -395,29 +437,42 @@ export default function Works() {
         <motion.div
           layout
           style={{
-            marginTop: '40px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '12px',
+            marginTop: "40px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "12px",
           }}
         >
-          <span style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '0.82rem',
-            color: 'var(--text-muted)',
-          }}>
-            Showing <strong style={{ color: 'var(--text-secondary)' }}>{filtered.length}</strong> of {projects.length} projects
+          <span
+            style={{
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: "0.82rem",
+              color: "var(--text-muted)",
+            }}
+          >
+            Showing{" "}
+            <strong style={{ color: "var(--text-secondary)" }}>
+              {filtered.length}
+            </strong>{" "}
+            of {projects.length} projects
           </span>
-          <span style={{ width: '1px', height: '14px', background: 'var(--text-muted)', opacity: 0.3 }} />
+          <span
+            style={{
+              width: "1px",
+              height: "14px",
+              background: "var(--text-muted)",
+              opacity: 0.3,
+            }}
+          />
           <a
             href="#contact"
             style={{
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: '0.82rem',
-              color: 'var(--cyan-pop)',
-              textDecoration: 'none',
-              fontWeight: '500',
+              fontFamily: "DM Sans, sans-serif",
+              fontSize: "0.82rem",
+              color: "var(--cyan-pop)",
+              textDecoration: "none",
+              fontWeight: "500",
             }}
           >
             Have a project in mind? →

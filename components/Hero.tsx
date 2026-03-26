@@ -108,7 +108,7 @@ export default function Hero() {
               textTransform: 'uppercase',
               color: 'var(--cyan-pop)',
             }}>
-             Product Engineering Studio
+             We Build What Matters
             </span>
           </motion.div>
 

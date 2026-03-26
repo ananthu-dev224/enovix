@@ -23,8 +23,14 @@ const services = [
     title: 'Web Development',
     tagline: 'Fast. Scalable. Pixel-perfect.',
     description:
-      'We engineer modern web applications using the latest frameworks — React, Next.js, and beyond. From landing pages to full-stack SaaS platforms, we deliver performance-first experiences.',
-    features: ['MERN', 'Next.js', 'MongoDB/SQL', 'REST & GraphQL APIs', 'CMS Integration', 'SEO Optimized', 'Responsive UI'],
+    'We build modern web applications and websites using React, Next.js, and WordPress — from simple business sites to scalable SaaS platforms.',
+    features: [
+      'E-commerce Websites',
+      'Portfolio Websites',
+      'Business Websites',
+      'Custom Web Applications',
+      'SaaS Platforms'
+    ],
     color: '#2889e8',
     glow: 'rgba(40, 137, 232, 0.15)',
     border: 'rgba(40, 137, 232, 0.25)',
@@ -39,7 +45,13 @@ const services = [
     tagline: 'Native power. Seamless feel.',
     description:
       'Robust Android applications crafted for performance on every device. We build apps using Flutter, following Material Design for intuitive, engaging user experiences.',
-    features: ['Flutter', 'Material You Design', 'Firebase Integration', 'Play Store Launch', 'Offline Support'],
+    features: [
+      'E-commerce Apps',
+      'Booking & Service Apps',
+      'Social Media Apps',
+      'Business & Productivity Apps',
+      'Custom Android Applications'
+    ],
     color: '#3ddc84',
     glow: 'rgba(61, 220, 132, 0.12)',
     border: 'rgba(61, 220, 132, 0.2)',
@@ -54,7 +66,13 @@ const services = [
     tagline: 'Refined. Polished. Apple-approved.',
     description:
       'Premium iOS apps built with Flutter that feel right at home on Apple devices. We follow Human Interface Guidelines to deliver apps users love and App Store reviewers approve.',
-    features: ['Flutter', 'Human Interface Guidelines', 'App Store Submission', 'Apple Pay Integration', 'iCloud Sync'],
+    features: [
+      'E-commerce Apps',
+      'On-demand Service Apps',
+      'Social Networking Apps',
+      'Enterprise iOS Solutions',
+      'Custom iOS Applications'
+    ],
     color: '#a855f7',
     glow: 'rgba(168, 85, 247, 0.12)',
     border: 'rgba(168, 85, 247, 0.2)',
