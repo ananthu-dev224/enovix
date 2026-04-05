@@ -58,9 +58,15 @@ export default function Contact() {
 
   const current = STEPS[step];
 
+  const [started, setStarted] = useState(false);
+
   useEffect(() => {
-    if (status === 'idle') setTimeout(() => (inputRef.current as HTMLElement | null)?.focus(), 150);
-  }, [step, status]);
+    // Only auto-focus after the user has started interacting (step > 0)
+    // to prevent the browser from scrolling to this section on initial page load
+    if (status === 'idle' && started) {
+      setTimeout(() => (inputRef.current as HTMLElement | null)?.focus(), 150);
+    }
+  }, [step, status, started]);
 
   useEffect(() => {
     if (transcriptRef.current) transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
@@ -70,6 +76,7 @@ export default function Contact() {
 
   const commit = (value: string) => {
     if (current.required && !value.trim()) return;
+    if (!started) setStarted(true);
     const next = { ...form, [current.key]: value };
     setForm(next);
     setDraft('');
@@ -103,6 +110,7 @@ export default function Contact() {
 
   const restart = () => {
     setStep(0);
+    setStarted(false);
     setForm({ name:'', email:'', company:'', service:'', budget:'', message:'' });
     setDraft('');
     setStatus('idle');
