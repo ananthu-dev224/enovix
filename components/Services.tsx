@@ -12,6 +12,7 @@ import {
   Shield,
   Layers,
   ArrowUpRight,
+  FileDown,
 } from 'lucide-react';
 
 const services = [
@@ -266,7 +267,6 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
   );
 }
 
-// Utility to convert hex to RGB string
 function hexToRgb(hex: string) {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
@@ -276,6 +276,9 @@ function hexToRgb(hex: string) {
 
 export default function Services() {
   const headingReveal = useReveal();
+
+  // ── Replace this path with your actual PDF filename in /public ──
+  const BROCHURE_PATH = '/enovix-brochure.pdf';
 
   return (
     <section id="services" style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
@@ -357,6 +360,7 @@ export default function Services() {
             gap: '24px',
           }}
         >
+          {/* Left: icon + text */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <div style={{
               width: '48px',
@@ -391,27 +395,71 @@ export default function Services() {
               </div>
             </div>
           </div>
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.04, y: -2 }}
-            whileTap={{ scale: 0.97 }}
-            style={{
-              textDecoration: 'none',
-              padding: '12px 28px',
-              borderRadius: '6px',
-              background: 'linear-gradient(135deg, #1a6fc4, #2889e8)',
-              color: 'white',
-              fontFamily: 'Syne, sans-serif',
-              fontWeight: '600',
-              fontSize: '0.82rem',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 4px 20px rgba(0, 212, 255, 0.2)',
-            }}
-          >
-            Let&apos;s Talk
-          </motion.a>
+
+          {/* Right: buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+
+            {/* View Brochure */}
+            <motion.a
+              href={BROCHURE_PATH}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                textDecoration: 'none',
+                padding: '12px 22px',
+                borderRadius: '6px',
+                background: 'rgba(0, 212, 255, 0.06)',
+                border: '1px solid rgba(0, 212, 255, 0.25)',
+                color: '#00d4ff',
+                fontFamily: 'Syne, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.82rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                whiteSpace: 'nowrap',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'background 0.2s ease, border-color 0.2s ease',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,212,255,0.1)';
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(0,212,255,0.45)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(0,212,255,0.06)';
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'rgba(0,212,255,0.25)';
+              }}
+            >
+              <FileDown size={15} strokeWidth={1.8} />
+              View Brochure
+            </motion.a>
+
+            {/* Let's Talk */}
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                textDecoration: 'none',
+                padding: '12px 28px',
+                borderRadius: '6px',
+                background: 'linear-gradient(135deg, #1a6fc4, #2889e8)',
+                color: 'white',
+                fontFamily: 'Syne, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.82rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 20px rgba(0, 212, 255, 0.2)',
+              }}
+            >
+              Let&apos;s Talk
+            </motion.a>
+          </div>
         </motion.div>
       </div>
 
@@ -420,9 +468,6 @@ export default function Services() {
           section#services > div > div[style*="justifyContent"] {
             flex-direction: column !important;
             align-items: flex-start !important;
-          }
-          section#services div[style*="padding: '36px 48px'"] {
-            padding: 24px !important;
           }
         }
       `}</style>

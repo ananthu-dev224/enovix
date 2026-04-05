@@ -35,7 +35,7 @@ const projects = [
     glow: "rgba(40, 137, 232, 0.18)",
     gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
     accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
-    image: "/medrecq.jpg",
+    image: "/medrecq_ios.jpg",
     link: "https://apps.apple.com/us/app/medrec-q-dictate/id6759154532"
   },
 ];
