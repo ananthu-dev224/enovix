@@ -278,7 +278,7 @@ export default function Services() {
   const headingReveal = useReveal();
 
   // ── Replace this path with your actual PDF filename in /public ──
-  const BROCHURE_PATH = '/enovix-brochure.pdf';
+  const BROCHURE_PATH = '/enovixtech-brochure.pdf';
 
   return (
     <section id="services" style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
