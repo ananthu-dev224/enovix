@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Heart } from 'lucide-react';
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { FaFacebook, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
 import Image from 'next/image';
 import { a } from 'framer-motion/client';
 
@@ -23,9 +24,9 @@ const services = [
 
 const socials = [
   { icon: FaFacebook, href: 'https://facebook.com/', label: 'Facebook' },
-  { icon: FaTwitter, href: 'https://twitter.com/', label: 'Twitter' },
+  { icon: FaSquareXTwitter , href: 'https://twitter.com/', label: 'X' },
   { icon: FaLinkedin, href: 'https://linkedin.com/', label: 'LinkedIn' },
-  { icon: FaInstagram, href: 'https://instagram.com/', label: 'Instagram' },
+  { icon: FaInstagram, href: 'https://instagram.com/enovix.tech', label: 'Instagram' },
 ];
 
 export default function Footer() {
