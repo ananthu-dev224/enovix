@@ -21,7 +21,7 @@ const projects = [
     gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
     accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
     image: "/medrecq.jpg",
-    link: "https://play.google.com/store/apps/details?id=app.medrec_q.dictate"
+    link: "https://play.google.com/store/apps/details?id=app.medrec_q.dictate",
   },
   {
     id: 2,
@@ -36,7 +36,42 @@ const projects = [
     gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
     accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
     image: "/medrecq_ios.jpg",
-    link: "https://apps.apple.com/us/app/medrec-q-dictate/id6759154532"
+    link: "https://apps.apple.com/us/app/medrec-q-dictate/id6759154532",
+  },
+  {
+    id: 3,
+    title: "Medrec-Q Desktop Dictation",
+    category: "Web",
+    tags: [
+      "Electron.js",
+      "Floating Recorder",
+      "Medical Dictation",
+      "Cross-Platform",
+    ],
+    description:
+      "A cross-platform desktop dictation app built with Electron.js for medical professionals. The app features a floating always-on-top recorder that works seamlessly over other applications.",
+    year: "2026",
+    color: "#2889e8",
+    glow: "rgba(40, 137, 232, 0.18)",
+    gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
+    accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
+    image: "/desktop-app-2.png",
+    link: "",
+  },
+  {
+    id: 5,
+    title: "Medrec-Q Dictation Management System",
+    category: "Web",
+    tags: ["Next.js", "Node.js", "AI Transcription", "Role-Based Access"],
+    description:
+      "A web-based dictation platform with role-based access, AI transcription, rich text editing, report review, and seamless submission. Powered by Artificial Intelligence.",
+    year: "2026",
+    color: "#2889e8",
+    glow: "rgba(40, 137, 232, 0.18)",
+    gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
+    accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
+    image: "/dms.png",
+    link: "https://dms.medrecq.com/",
   },
 ];
 
@@ -57,6 +92,29 @@ function ProjectCard({
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const [hovered, setHovered] = useState(false);
+  const hasLink = project.link && project.link !== "#";
+
+  const arrowButton = (
+    <motion.div
+      animate={{ rotate: hovered ? 45 : 0, scale: hovered ? 1.1 : 1 }}
+      transition={{ duration: 0.25 }}
+      style={{
+        width: "32px",
+        height: "32px",
+        borderRadius: "8px",
+        background: `rgba(${hexToRgb(project.color)}, 0.1)`,
+        border: `1px solid rgba(${hexToRgb(project.color)}, 0.25)`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        cursor: hasLink ? "pointer" : "default",
+        opacity: hasLink ? 1 : 0.7,
+      }}
+    >
+      <ArrowUpRight size={15} color={project.color} />
+    </motion.div>
+  );
 
   return (
     <motion.div
@@ -207,26 +265,13 @@ function ProjectCard({
           >
             {project.title}
           </h3>
-          <Link href={project.link || "#"} target="_blank">
-            <motion.div
-              animate={{ rotate: hovered ? 45 : 0, scale: hovered ? 1.1 : 1 }}
-              transition={{ duration: 0.25 }}
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "8px",
-                background: `rgba(${hexToRgb(project.color)}, 0.1)`,
-                border: `1px solid rgba(${hexToRgb(project.color)}, 0.25)`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                cursor: "pointer",
-              }}
-            >
-              <ArrowUpRight size={15} color={project.color} />
-            </motion.div>
-          </Link>
+          {hasLink ? (
+            <Link href={project.link} target="_blank" rel="noopener noreferrer">
+              {arrowButton}
+            </Link>
+          ) : (
+            arrowButton
+          )}
         </div>
 
         {/* Description */}
