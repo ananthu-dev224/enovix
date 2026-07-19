@@ -11,26 +11,28 @@ import {
   Zap,
   Shield,
   Layers,
+  BrainCircuit,
+  Palette,
   ArrowUpRight,
   FileDown,
 } from 'lucide-react';
 
 const services = [
   {
-    id: 'web',
-    icon: Globe,
-    accentIcon: Code2,
+    id: 'application-development',
+    icon: Code2,
+    accentIcon: Zap,
     label: '01',
-    title: 'Web Development',
-    tagline: 'Fast. Scalable. Pixel-perfect.',
+    title: 'Application Development',
+    tagline: 'Custom. Secure. Built to scale.',
     description:
-    'We build modern web applications and websites using React, Next.js, and WordPress — from simple business sites to scalable SaaS platforms.',
+      'We design and build custom applications that streamline operations, solve complex business challenges, and scale reliably as your organization grows.',
     features: [
-      'E-commerce Websites',
-      'Portfolio Websites',
-      'Business Websites',
-      'Custom Web Applications',
-      'SaaS Platforms'
+      'Custom Business Applications',
+      'SaaS Platforms',
+      'Enterprise Solutions',
+      'API Development & Integration',
+      'Application Modernization'
     ],
     color: '#2889e8',
     glow: 'rgba(40, 137, 232, 0.15)',
@@ -38,20 +40,62 @@ const services = [
     gradient: 'linear-gradient(135deg, rgba(40, 137, 232, 0.12), rgba(0, 212, 255, 0.06))',
   },
   {
-    id: 'android',
-    icon: Smartphone,
-    accentIcon: Zap,
+    id: 'web-development-management',
+    icon: Globe,
+    accentIcon: Shield,
     label: '02',
-    title: 'Android Development',
-    tagline: 'Native power. Seamless feel.',
+    title: 'Web Development & Management',
+    tagline: 'Fast. Reliable. Always evolving.',
     description:
-      'Robust Android applications crafted for performance on every device. We build apps using Flutter, following Material Design for intuitive, engaging user experiences.',
+      'We create high-performing websites and web applications, then keep them secure, optimized, and up to date with dependable ongoing management.',
     features: [
-      'E-commerce Apps',
-      'Booking & Service Apps',
-      'Social Media Apps',
-      'Business & Productivity Apps',
-      'Custom Android Applications'
+      'Business & Corporate Websites',
+      'E-commerce Development',
+      'Custom Web Applications',
+      'Performance & SEO',
+      'Maintenance & Support'
+    ],
+    color: '#00d4ff',
+    glow: 'rgba(0, 212, 255, 0.12)',
+    border: 'rgba(0, 212, 255, 0.2)',
+    gradient: 'linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(40, 137, 232, 0.05))',
+  },
+  {
+    id: 'mobile-app-development',
+    icon: Smartphone,
+    accentIcon: Apple,
+    label: '03',
+    title: 'Mobile App Development',
+    tagline: 'Intuitive. Engaging. Cross-platform.',
+    description:
+      'We build intuitive, high-performance mobile apps for iOS and Android, delivering seamless experiences from initial concept through launch and support.',
+    features: [
+      'iOS & Android Apps',
+      'Cross-platform Development',
+      'UI/UX Implementation',
+      'App Store Deployment',
+      'Maintenance & Updates'
+    ],
+    color: '#a855f7',
+    glow: 'rgba(168, 85, 247, 0.12)',
+    border: 'rgba(168, 85, 247, 0.2)',
+    gradient: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(40, 137, 232, 0.05))',
+  },
+  {
+    id: 'product-engineering',
+    icon: Layers,
+    accentIcon: Code2,
+    label: '04',
+    title: 'Product Engineering',
+    tagline: 'From idea to market-ready product.',
+    description:
+      'We turn ideas into reliable digital products through strategic planning, rapid prototyping, scalable engineering, and continuous improvement.',
+    features: [
+      'Product Strategy & Discovery',
+      'MVP Development',
+      'Architecture & Prototyping',
+      'Quality Engineering',
+      'Product Scaling'
     ],
     color: '#3ddc84',
     glow: 'rgba(61, 220, 132, 0.12)',
@@ -59,25 +103,46 @@ const services = [
     gradient: 'linear-gradient(135deg, rgba(61, 220, 132, 0.1), rgba(0, 212, 255, 0.04))',
   },
   {
-    id: 'ios',
-    icon: Apple,
-    accentIcon: Shield,
-    label: '03',
-    title: 'iOS Development',
-    tagline: 'Refined. Polished. Apple-approved.',
+    id: 'ai-integration',
+    icon: BrainCircuit,
+    accentIcon: Zap,
+    label: '05',
+    title: 'AI Integration',
+    tagline: 'Smarter workflows. Better decisions.',
     description:
-      'Premium iOS apps built with Flutter that feel right at home on Apple devices. We follow Human Interface Guidelines to deliver apps users love and App Store reviewers approve.',
+      'We integrate practical AI capabilities into your products and business processes to automate repetitive work, improve customer experiences, and unlock valuable insights.',
     features: [
-      'E-commerce Apps',
-      'On-demand Service Apps',
-      'Social Networking Apps',
-      'Enterprise iOS Solutions',
-      'Custom iOS Applications'
+      'AI Assistants & Chatbots',
+      'Workflow Automation',
+      'Generative AI Integration',
+      'Data Analysis & Insights',
+      'Custom AI Solutions'
     ],
-    color: '#a855f7',
-    glow: 'rgba(168, 85, 247, 0.12)',
-    border: 'rgba(168, 85, 247, 0.2)',
-    gradient: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(40, 137, 232, 0.05))',
+    color: '#f59e0b',
+    glow: 'rgba(245, 158, 11, 0.12)',
+    border: 'rgba(245, 158, 11, 0.2)',
+    gradient: 'linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(168, 85, 247, 0.04))',
+  },
+  {
+    id: 'graphic-ui-design',
+    icon: Palette,
+    accentIcon: Layers,
+    label: '06',
+    title: 'Graphic & UI Design',
+    tagline: 'Distinctive. Intuitive. User-focused.',
+    description:
+      'We create compelling visual identities and intuitive digital interfaces that communicate your brand clearly and make every user interaction feel effortless.',
+    features: [
+      'UI/UX Design',
+      'Brand Identity',
+      'Web & Mobile Interfaces',
+      'Marketing Creatives',
+      'Prototyping & Design Systems'
+    ],
+    color: '#f472b6',
+    glow: 'rgba(244, 114, 182, 0.12)',
+    border: 'rgba(244, 114, 182, 0.2)',
+    gradient: 'linear-gradient(135deg, rgba(244, 114, 182, 0.1), rgba(168, 85, 247, 0.05))',
   },
 ];
 
@@ -275,7 +340,7 @@ function hexToRgb(hex: string) {
 }
 
 export default function Services() {
-  const headingReveal = useReveal();
+  const { ref: headingRef, inView: headingInView } = useReveal();
 
   // ── Replace this path with your actual PDF filename in /public ──
   const BROCHURE_PATH = '/enovixtech-brochure.pdf';
@@ -290,9 +355,9 @@ export default function Services() {
 
         {/* Section header */}
         <motion.div
-          ref={headingReveal.ref}
+          ref={headingRef}
           initial={{ opacity: 0, y: 30 }}
-          animate={headingReveal.inView ? { opacity: 1, y: 0 } : {}}
+          animate={headingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
           style={{ marginBottom: '70px' }}
         >
@@ -391,7 +456,7 @@ export default function Services() {
                 color: 'var(--text-secondary)',
                 fontWeight: '300',
               }}>
-                We combine all three — web + Android + iOS — into one unified product team.
+                We unite design, AI, application, web, mobile, and product engineering in one expert team.
               </div>
             </div>
           </div>
