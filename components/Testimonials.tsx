@@ -11,7 +11,7 @@ const testimonials = [
     role: 'Founder',
     company: 'Medrec-Q',
     avatar: 'V',
-    avatarColor: '#2889e8',
+    avatarColor: '#1a6fc4',
     rating: 5,
     text: 'Working with Enovix was a great experience. The team delivered exactly what we needed on time, kept us informed throughout the project, and maintained a high standard of quality from start to finish. They are reliable, responsive, and genuinely easy to work with.',
     project: 'App & Web',
@@ -21,37 +21,95 @@ const testimonials = [
 
 function StarRating({ count }: { count: number }) {
   return (
-    <div style={{ display: 'flex', gap: '3px' }}>
+    <div style={{ display: 'flex', gap: 3 }} aria-label={`${count} star rating`}>
       {Array.from({ length: count }).map((_, i) => (
-        <Star key={i} size={13} fill="#f59e0b" color="#f59e0b" />
+        <Star key={i} size={14} fill="#f59e0b" color="#f59e0b" />
       ))}
     </div>
   );
 }
 
 function Avatar({ initials, color }: { initials: string; color: string }) {
-  function hexToRgb(hex: string) {
-    const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return r ? `${parseInt(r[1], 16)}, ${parseInt(r[2], 16)}, ${parseInt(r[3], 16)}` : '255,255,255';
-  }
   return (
-    <div style={{
-      width: '48px',
-      height: '48px',
-      borderRadius: '50%',
-      background: `radial-gradient(circle at 35% 35%, rgba(${hexToRgb(color)}, 0.5), rgba(${hexToRgb(color)}, 0.15))`,
-      border: `1.5px solid rgba(${hexToRgb(color)}, 0.4)`,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'Syne, sans-serif',
-      fontWeight: '700',
-      fontSize: '0.85rem',
-      color: color,
-      flexShrink: 0,
-      letterSpacing: '0.02em',
-    }}>
+    <div
+      style={{
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+        background: 'var(--blue-soft)',
+        border: `1.5px solid ${color}40`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Syne, sans-serif',
+        fontWeight: 700,
+        fontSize: '0.9rem',
+        color,
+        flexShrink: 0,
+      }}
+    >
       {initials}
+    </div>
+  );
+}
+
+function MiniCard({ t }: { t: (typeof testimonials)[0] }) {
+  return (
+    <div
+      style={{
+        borderRadius: 16,
+        padding: 24,
+        background: '#ffffff',
+        border: '1px solid var(--border)',
+        boxShadow: 'var(--shadow-sm)',
+      }}
+    >
+      <div
+        style={{
+          fontFamily: 'DM Sans, sans-serif',
+          fontSize: '0.78rem',
+          color: 'var(--text-secondary)',
+          lineHeight: 1.6,
+          marginBottom: 16,
+          display: '-webkit-box',
+          WebkitLineClamp: 3,
+          WebkitBoxOrient: 'vertical' as const,
+          overflow: 'hidden',
+          fontStyle: 'italic',
+        }}
+      >
+        &ldquo;{t.text}&rdquo;
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: '50%',
+            background: 'var(--blue-soft)',
+            border: '1px solid var(--blue-soft-border)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: 'Syne, sans-serif',
+            fontSize: '0.6rem',
+            fontWeight: 700,
+            color: t.avatarColor,
+          }}
+        >
+          {t.avatar}
+        </div>
+        <span
+          style={{
+            fontFamily: 'Syne, sans-serif',
+            fontSize: '0.72rem',
+            fontWeight: 600,
+            color: 'var(--text-secondary)',
+          }}
+        >
+          {t.name}
+        </span>
+      </div>
     </div>
   );
 }
@@ -65,9 +123,8 @@ export default function Testimonials() {
   const [isPaused, setIsPaused] = useState(false);
   const total = testimonials.length;
 
-  // Auto-advance
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || total <= 1) return;
     const timer = setInterval(() => {
       setDirection(1);
       setCurrent((prev) => (prev + 1) % total);
@@ -86,122 +143,104 @@ export default function Testimonials() {
   };
 
   const variants = {
-    enter: (d: number) => ({ opacity: 0, x: d > 0 ? 60 : -60, scale: 0.97 }),
+    enter: (d: number) => ({ opacity: 0, x: d > 0 ? 48 : -48, scale: 0.98 }),
     center: { opacity: 1, x: 0, scale: 1 },
-    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -60 : 60, scale: 0.97 }),
+    exit: (d: number) => ({ opacity: 0, x: d > 0 ? -48 : 48, scale: 0.98 }),
   };
 
   const t = testimonials[current];
-  // Side previews
   const prev = testimonials[(current - 1 + total) % total];
   const next = testimonials[(current + 1) % total];
 
   return (
     <section
       id="testimonials"
-      style={{ padding: '120px 0', position: 'relative', overflow: 'hidden' }}
+      className="section-alt"
+      style={{ padding: '110px 0', position: 'relative' }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Background */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: 'linear-gradient(180deg, transparent 0%, rgba(7, 30, 61, 0.3) 50%, transparent 100%)',
-        pointerEvents: 'none',
-      }} />
-      <div className="orb orb-cyan" style={{ width: '500px', height: '500px', top: '0', right: '-100px', opacity: 0.2 }} />
-      <div className="orb orb-blue" style={{ width: '400px', height: '400px', bottom: '0', left: '-100px', opacity: 0.2 }} />
-
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 32px' }}>
-
-        {/* Header */}
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px' }} className="testimonials-inner">
         <motion.div
           ref={headingRef}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          style={{ textAlign: 'center', marginBottom: '72px' }}
+          transition={{ duration: 0.65 }}
+          style={{ textAlign: 'center', marginBottom: 64 }}
         >
-          <div className="section-label" style={{ justifyContent: 'center', marginBottom: '20px' }}>
+          <div
+            className="section-label"
+            style={{ justifyContent: 'center', marginBottom: 18 }}
+          >
             Client Love
           </div>
-          <h2 style={{
-            fontFamily: 'Syne, sans-serif',
-            fontSize: 'clamp(2.2rem, 5vw, 3.5rem)',
-            fontWeight: '800',
-            lineHeight: 1.1,
-            letterSpacing: '-0.03em',
-            color: 'var(--text-primary)',
-            marginBottom: '16px',
-          }}>
+          <h2
+            className="section-title"
+            style={{
+              fontSize: 'clamp(2rem, 4.5vw, 3.25rem)',
+              lineHeight: 1.12,
+              letterSpacing: '-0.03em',
+              color: 'var(--text-primary)',
+              marginBottom: 14,
+            }}
+          >
             What Our{' '}
-            <span style={{
-              background: 'linear-gradient(135deg, #2889e8, #00d4ff)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}>
-              Clients Say
-            </span>
+            <span style={{ color: 'var(--blue-accent)' }}>Clients Say</span>
           </h2>
-          <p style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '1rem',
-            fontWeight: '300',
-            color: 'var(--text-secondary)',
-            maxWidth: '460px',
-            margin: '0 auto',
-            lineHeight: 1.7,
-          }}>
-            Real feedback from the people and companies we've had the pleasure of building with.
+          <p
+            style={{
+              fontFamily: 'DM Sans, sans-serif',
+              fontSize: '1rem',
+              fontWeight: 400,
+              color: 'var(--text-secondary)',
+              maxWidth: 460,
+              margin: '0 auto',
+              lineHeight: 1.7,
+            }}
+          >
+            Real feedback from the people and companies we&apos;ve had the pleasure
+            of building with.
           </p>
         </motion.div>
 
-        {/* Carousel */}
         <div style={{ position: 'relative' }}>
-
-          {/* Side previews (desktop) */}
-          <div className="side-previews" style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            pointerEvents: 'none',
-            zIndex: 1,
-          }}>
-            {/* Left ghost */}
-            <div style={{
-              width: '220px',
-              opacity: 0.25,
-              transform: 'scale(0.88)',
-              transformOrigin: 'right center',
+          <div
+            className="side-previews"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
               pointerEvents: 'none',
-              marginLeft: '-60px',
-            }}>
+              zIndex: 1,
+            }}
+          >
+            <div
+              style={{
+                width: 220,
+                opacity: 0.35,
+                transform: 'scale(0.88)',
+                transformOrigin: 'right center',
+                marginLeft: -60,
+              }}
+            >
               <MiniCard t={prev} />
             </div>
-            {/* Right ghost */}
-            <div style={{
-              width: '220px',
-              opacity: 0.25,
-              transform: 'scale(0.88)',
-              transformOrigin: 'left center',
-              pointerEvents: 'none',
-              marginRight: '-60px',
-            }}>
+            <div
+              style={{
+                width: 220,
+                opacity: 0.35,
+                transform: 'scale(0.88)',
+                transformOrigin: 'left center',
+                marginRight: -60,
+              }}
+            >
               <MiniCard t={next} />
             </div>
           </div>
 
-          {/* Main card */}
-          <div style={{
-            maxWidth: '720px',
-            margin: '0 auto',
-            position: 'relative',
-            zIndex: 2,
-          }}>
+          <div style={{ maxWidth: 720, margin: '0 auto', position: 'relative', zIndex: 2 }}>
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={t.id}
@@ -210,104 +249,107 @@ export default function Testimonials() {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 style={{
-                  borderRadius: '20px',
-                  padding: '52px 52px 44px',
-                  background: 'rgba(4, 20, 40, 0.8)',
-                  border: '1px solid rgba(42, 137, 232, 0.18)',
-                  backdropFilter: 'blur(20px)',
+                  borderRadius: 20,
+                  padding: '48px 48px 40px',
+                  background: '#ffffff',
+                  border: '1px solid var(--border)',
+                  boxShadow: 'var(--shadow-lg)',
                   position: 'relative',
                   overflow: 'hidden',
                 }}
+                className="testimonial-card"
               >
-                {/* Accent glow from avatar color */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  width: '280px',
-                  height: '280px',
-                  borderRadius: '50%',
-                  background: `radial-gradient(circle, ${t.avatarColor}18 0%, transparent 70%)`,
-                  pointerEvents: 'none',
-                }} />
-
-                {/* Quote icon */}
-                <div style={{
-                  position: 'absolute',
-                  top: '36px',
-                  right: '44px',
-                  opacity: 0.08,
-                }}>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 32,
+                    right: 40,
+                    opacity: 0.08,
+                  }}
+                >
                   <Quote size={72} color={t.avatarColor} />
                 </div>
 
-                {/* Rating + project tag */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '12px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 24,
+                    flexWrap: 'wrap',
+                    gap: 12,
+                  }}
+                >
                   <StarRating count={t.rating} />
-                  <span style={{
-                    padding: '4px 12px',
-                    borderRadius: '100px',
-                    background: `rgba(42, 137, 232, 0.1)`,
-                    border: '1px solid rgba(42, 137, 232, 0.2)',
-                    fontFamily: 'DM Sans, sans-serif',
-                    fontSize: '0.7rem',
-                    fontWeight: '500',
-                    color: 'var(--blue-bright)',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase' as const,
-                  }}>
+                  <span
+                    style={{
+                      padding: '4px 12px',
+                      borderRadius: 100,
+                      background: 'var(--blue-soft)',
+                      border: '1px solid var(--blue-soft-border)',
+                      fontFamily: 'DM Sans, sans-serif',
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      color: 'var(--blue-accent)',
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
                     {t.project}
                   </span>
                 </div>
 
-                {/* Quote text */}
-                <blockquote style={{
-                  fontFamily: 'DM Sans, sans-serif',
-                  fontSize: 'clamp(1rem, 2vw, 1.15rem)',
-                  fontWeight: '300',
-                  fontStyle: 'italic',
-                  lineHeight: 1.8,
-                  color: 'var(--text-primary)',
-                  marginBottom: '36px',
-                  position: 'relative',
-                }}>
+                <blockquote
+                  style={{
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: 'clamp(1rem, 2vw, 1.12rem)',
+                    fontWeight: 400,
+                    fontStyle: 'italic',
+                    lineHeight: 1.8,
+                    color: 'var(--text-primary)',
+                    marginBottom: 32,
+                  }}
+                >
                   &ldquo;{t.text}&rdquo;
                 </blockquote>
 
-                {/* Divider */}
-                <div style={{
-                  width: '100%',
-                  height: '1px',
-                  background: 'rgba(42, 137, 232, 0.12)',
-                  marginBottom: '28px',
-                }} />
+                <div
+                  style={{
+                    width: '100%',
+                    height: 1,
+                    background: 'var(--border)',
+                    marginBottom: 24,
+                  }}
+                />
 
-                {/* Author */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                   <Avatar initials={t.avatar} color={t.avatarColor} />
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{
-                        fontFamily: 'Syne, sans-serif',
-                        fontSize: '0.95rem',
-                        fontWeight: '700',
-                        color: 'var(--text-primary)',
-                        letterSpacing: '-0.01em',
-                      }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span
+                        style={{
+                          fontFamily: 'Syne, sans-serif',
+                          fontSize: '0.95rem',
+                          fontWeight: 700,
+                          color: 'var(--text-primary)',
+                        }}
+                      >
                         {t.name}
                       </span>
                       <span style={{ fontSize: '0.9rem' }}>{t.flag}</span>
                     </div>
-                    <div style={{
-                      fontFamily: 'DM Sans, sans-serif',
-                      fontSize: '0.8rem',
-                      fontWeight: '400',
-                      color: 'var(--text-muted)',
-                      marginTop: '2px',
-                    }}>
-                      {t.role} · <span style={{ color: t.avatarColor, opacity: 0.85 }}>{t.company}</span>
+                    <div
+                      style={{
+                        fontFamily: 'DM Sans, sans-serif',
+                        fontSize: '0.82rem',
+                        color: 'var(--text-muted)',
+                        marginTop: 2,
+                      }}
+                    >
+                      {t.role} ·{' '}
+                      <span style={{ color: 'var(--blue-accent)' }}>{t.company}</span>
                     </div>
                   </div>
                 </div>
@@ -315,58 +357,67 @@ export default function Testimonials() {
             </AnimatePresence>
           </div>
 
-          {/* Nav controls */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '20px',
-            marginTop: '40px',
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 20,
+              marginTop: 36,
+            }}
+          >
             <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.93 }}
+              type="button"
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.94 }}
               onClick={() => go(-1)}
+              aria-label="Previous testimonial"
               style={{
-                width: '42px',
-                height: '42px',
+                width: 42,
+                height: 42,
                 borderRadius: '50%',
-                border: '1px solid rgba(42, 137, 232, 0.25)',
-                background: 'rgba(4, 20, 40, 0.7)',
+                border: '1px solid var(--border)',
+                background: '#ffffff',
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backdropFilter: 'blur(8px)',
+                boxShadow: 'var(--shadow-sm)',
                 transition: 'border-color 0.2s, color 0.2s',
               }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(0,212,255,0.4)';
-                (e.currentTarget as HTMLButtonElement).style.color = 'var(--cyan-pop)';
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor =
+                  'var(--blue-accent)';
+                (e.currentTarget as HTMLButtonElement).style.color =
+                  'var(--blue-accent)';
               }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(42,137,232,0.25)';
-                (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)';
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor =
+                  'var(--border)';
+                (e.currentTarget as HTMLButtonElement).style.color =
+                  'var(--text-secondary)';
               }}
             >
               <ChevronLeft size={18} />
             </motion.button>
 
-            {/* Dot indicators */}
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               {testimonials.map((_, i) => (
                 <motion.button
                   key={i}
+                  type="button"
                   onClick={() => goTo(i)}
+                  aria-label={`Go to testimonial ${i + 1}`}
                   animate={{
                     width: i === current ? 24 : 8,
-                    background: i === current ? '#00d4ff' : 'rgba(42,137,232,0.3)',
+                    background:
+                      i === current ? 'var(--blue-accent)' : '#d1d5db',
                   }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.25 }}
                   style={{
-                    height: '8px',
-                    borderRadius: '4px',
+                    height: 8,
+                    borderRadius: 4,
                     border: 'none',
                     cursor: 'pointer',
                     padding: 0,
@@ -376,154 +427,76 @@ export default function Testimonials() {
             </div>
 
             <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.93 }}
+              type="button"
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.94 }}
               onClick={() => go(1)}
+              aria-label="Next testimonial"
               style={{
-                width: '42px',
-                height: '42px',
+                width: 42,
+                height: 42,
                 borderRadius: '50%',
-                border: '1px solid rgba(42, 137, 232, 0.25)',
-                background: 'rgba(4, 20, 40, 0.7)',
+                border: '1px solid var(--border)',
+                background: '#ffffff',
                 color: 'var(--text-secondary)',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backdropFilter: 'blur(8px)',
+                boxShadow: 'var(--shadow-sm)',
                 transition: 'border-color 0.2s, color 0.2s',
               }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(0,212,255,0.4)';
-                (e.currentTarget as HTMLButtonElement).style.color = 'var(--cyan-pop)';
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor =
+                  'var(--blue-accent)';
+                (e.currentTarget as HTMLButtonElement).style.color =
+                  'var(--blue-accent)';
               }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(42,137,232,0.25)';
-                (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)';
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor =
+                  'var(--border)';
+                (e.currentTarget as HTMLButtonElement).style.color =
+                  'var(--text-secondary)';
               }}
             >
               <ChevronRight size={18} />
             </motion.button>
           </div>
 
-          {/* Auto-play progress bar */}
-          {!isPaused && (
-            <div style={{ maxWidth: '720px', margin: '20px auto 0', height: '2px', background: 'rgba(42,137,232,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
+          {!isPaused && total > 1 && (
+            <div
+              style={{
+                maxWidth: 720,
+                margin: '20px auto 0',
+                height: 2,
+                background: 'var(--border)',
+                borderRadius: 2,
+                overflow: 'hidden',
+              }}
+            >
               <motion.div
                 key={current}
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
                 transition={{ duration: 5, ease: 'linear' }}
-                style={{ height: '100%', background: 'linear-gradient(90deg, #1a6fc4, #00d4ff)', borderRadius: '2px' }}
+                style={{
+                  height: '100%',
+                  background: 'var(--blue-accent)',
+                  borderRadius: 2,
+                }}
               />
             </div>
           )}
         </div>
-
-        {/* Trust strip */}
-        {/* <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          style={{
-            marginTop: '72px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '40px',
-            flexWrap: 'wrap',
-          }}
-        >
-          {[
-            { value: '5.0', label: 'Average Rating' },
-            { value: '30+', label: 'Happy Clients' },
-            { value: '100%', label: 'On-time Delivery' },
-          ].map((stat) => (
-            <div key={stat.label} style={{ textAlign: 'center' }}>
-              <div style={{
-                fontFamily: 'Syne, sans-serif',
-                fontSize: '1.8rem',
-                fontWeight: '800',
-                background: 'linear-gradient(135deg, #4dabff, #00d4ff)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                letterSpacing: '-0.03em',
-                lineHeight: 1,
-                marginBottom: '6px',
-              }}>
-                {stat.value}
-              </div>
-              <div style={{
-                fontFamily: 'DM Sans, sans-serif',
-                fontSize: '0.78rem',
-                color: 'var(--text-muted)',
-                letterSpacing: '0.06em',
-              }}>
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </motion.div> */}
       </div>
 
       <style>{`
         @media (max-width: 900px) {
           .side-previews { display: none !important; }
-          section#testimonials div[style*="padding: '52px 52px"] {
-            padding: 32px 24px 28px !important;
-          }
+          .testimonial-card { padding: 32px 24px 28px !important; }
+          .testimonials-inner { padding: 0 20px !important; }
         }
       `}</style>
     </section>
-  );
-}
-
-// Lightweight ghost card for side preview
-function MiniCard({ t }: { t: typeof testimonials[0] }) {
-  return (
-    <div style={{
-      borderRadius: '16px',
-      padding: '24px',
-      background: 'rgba(4, 20, 40, 0.6)',
-      border: '1px solid rgba(42, 137, 232, 0.1)',
-    }}>
-      <div style={{
-        fontFamily: 'DM Sans, sans-serif',
-        fontSize: '0.78rem',
-        color: 'var(--text-secondary)',
-        lineHeight: 1.6,
-        marginBottom: '16px',
-        display: '-webkit-box',
-        WebkitLineClamp: 3,
-        WebkitBoxOrient: 'vertical' as const,
-        overflow: 'hidden',
-        fontStyle: 'italic',
-      }}>
-        &ldquo;{t.text}&rdquo;
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <div style={{
-          width: '28px',
-          height: '28px',
-          borderRadius: '50%',
-          background: `${t.avatarColor}22`,
-          border: `1px solid ${t.avatarColor}44`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: 'Syne, sans-serif',
-          fontSize: '0.6rem',
-          fontWeight: '700',
-          color: t.avatarColor,
-        }}>
-          {t.avatar}
-        </div>
-        <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '0.72rem', fontWeight: '600', color: 'var(--text-secondary)' }}>
-          {t.name}
-        </span>
-      </div>
-    </div>
   );
 }
