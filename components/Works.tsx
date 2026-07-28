@@ -1,86 +1,59 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import { useState, useRef } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
 
-const categories = ["All", "Web", "Android", "iOS"];
+const categories = ['All', 'Web', 'Android', 'iOS'];
 
 const projects = [
   {
     id: 1,
-    title: "Medrec-Q Dictate",
-    category: "Android",
-    tags: ["Flutter", "Hive", "API Integration", "Playstore"],
+    title: 'Medrec-Q Dictate',
+    category: 'Android',
+    tags: ['Flutter', 'Hive', 'API Integration', 'Playstore'],
     description:
-      "A voice dictation application designed for the medical field, enabling users to record, send, and manage dictations efficiently. Features include dictation listing, resend and override options, priority tagging, comments, and customizable profile and settings management.",
-    year: "2026",
-    color: "#2889e8",
-    glow: "rgba(40, 137, 232, 0.18)",
-    gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
-    accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
-    image: "/medrecq.jpg",
-    link: "https://play.google.com/store/apps/details?id=app.medrec_q.dictate",
+      'A voice dictation application designed for the medical field, enabling users to record, send, and manage dictations efficiently. Features include dictation listing, resend and override options, priority tagging, comments, and customizable profile and settings management.',
+    year: '2026',
+    image: '/medrecq.jpg',
+    link: 'https://play.google.com/store/apps/details?id=app.medrec_q.dictate',
   },
   {
     id: 2,
-    title: "Medrec-Q Dictate",
-    category: "iOS",
-    tags: ["Flutter", "Hive", "API Integration", "Appstore"],
+    title: 'Medrec-Q Dictate',
+    category: 'iOS',
+    tags: ['Flutter', 'Hive', 'API Integration', 'Appstore'],
     description:
-      "A voice dictation application designed for the medical field, enabling users to record, send, and manage dictations efficiently. Features include dictation listing, resend and override options, priority tagging, comments, and customizable profile and settings management.",
-    year: "2026",
-    color: "#2889e8",
-    glow: "rgba(40, 137, 232, 0.18)",
-    gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
-    accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
-    image: "/medrecq_ios.jpg",
-    link: "https://apps.apple.com/us/app/medrec-q-dictate/id6759154532",
+      'A voice dictation application designed for the medical field, enabling users to record, send, and manage dictations efficiently. Features include dictation listing, resend and override options, priority tagging, comments, and customizable profile and settings management.',
+    year: '2026',
+    image: '/medrecq_ios.jpg',
+    link: 'https://apps.apple.com/us/app/medrec-q-dictate/id6759154532',
   },
   {
     id: 3,
-    title: "Medrec-Q Desktop Dictation",
-    category: "Web",
-    tags: [
-      "Electron.js",
-      "Floating Recorder",
-      "Medical Dictation",
-      "Cross-Platform",
-    ],
+    title: 'Medrec-Q Desktop Dictation',
+    category: 'Web',
+    tags: ['Electron.js', 'Floating Recorder', 'Medical Dictation', 'Cross-Platform'],
     description:
-      "A cross-platform desktop dictation app built with Electron.js for medical professionals. The app features a floating always-on-top recorder that works seamlessly over other applications.",
-    year: "2026",
-    color: "#2889e8",
-    glow: "rgba(40, 137, 232, 0.18)",
-    gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
-    accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
-    image: "/desktop-app-2.png",
-    link: "",
+      'A cross-platform desktop dictation app built with Electron.js for medical professionals. The app features a floating always-on-top recorder that works seamlessly over other applications.',
+    year: '2026',
+    image: '/desktop-app-2.png',
+    link: '',
   },
   {
     id: 5,
-    title: "Medrec-Q Dictation Management System",
-    category: "Web",
-    tags: ["Next.js", "Node.js", "AI Transcription", "Role-Based Access"],
+    title: 'Medrec-Q Dictation Management System',
+    category: 'Web',
+    tags: ['Next.js', 'Node.js', 'AI Transcription', 'Role-Based Access'],
     description:
-      "A web-based dictation platform with role-based access, AI transcription, rich text editing, report review, and seamless submission. Powered by Artificial Intelligence.",
-    year: "2026",
-    color: "#2889e8",
-    glow: "rgba(40, 137, 232, 0.18)",
-    gradient: "linear-gradient(135deg, #071e3d 0%, #0b2a57 60%, #1a3a6e 100%)",
-    accentGrad: "linear-gradient(135deg, #2889e8, #00d4ff)",
-    image: "/dms.png",
-    link: "https://dms.medrecq.com/",
+      'A web-based dictation platform with role-based access, AI transcription, rich text editing, report review, and seamless submission. Powered by Artificial Intelligence.',
+    year: '2026',
+    image: '/dms.png',
+    link: 'https://dms.medrecq.com/',
   },
 ];
-
-function hexToRgb(hex: string) {
-  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return r
-    ? `${parseInt(r[1], 16)}, ${parseInt(r[2], 16)}, ${parseInt(r[3], 16)}`
-    : "255,255,255";
-}
 
 function ProjectCard({
   project,
@@ -90,177 +63,137 @@ function ProjectCard({
   index: number;
 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: '-60px' });
   const [hovered, setHovered] = useState(false);
-  const hasLink = project.link && project.link !== "#";
+  const hasLink = Boolean(project.link && project.link !== '#');
 
   const arrowButton = (
     <motion.div
-      animate={{ rotate: hovered ? 45 : 0, scale: hovered ? 1.1 : 1 }}
+      animate={{ rotate: hovered ? 45 : 0, scale: hovered ? 1.08 : 1 }}
       transition={{ duration: 0.25 }}
       style={{
-        width: "32px",
-        height: "32px",
-        borderRadius: "8px",
-        background: `rgba(${hexToRgb(project.color)}, 0.1)`,
-        border: `1px solid rgba(${hexToRgb(project.color)}, 0.25)`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
+        width: 32,
+        height: 32,
+        borderRadius: 8,
+        background: 'var(--blue-soft)',
+        border: '1px solid var(--blue-soft-border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         flexShrink: 0,
-        cursor: hasLink ? "pointer" : "default",
-        opacity: hasLink ? 1 : 0.7,
+        cursor: hasLink ? 'pointer' : 'default',
+        opacity: hasLink ? 1 : 0.6,
       }}
     >
-      <ArrowUpRight size={15} color={project.color} />
+      <ArrowUpRight size={15} color="var(--blue-accent)" />
     </motion.div>
   );
 
   return (
-    <motion.div
+    <motion.article
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{
-        duration: 0.65,
-        delay: (index % 3) * 0.12,
+        duration: 0.6,
+        delay: (index % 3) * 0.1,
         ease: [0.22, 1, 0.36, 1],
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: "16px",
-        overflow: "hidden",
-        border: `1px solid rgba(${hexToRgb(project.color)}, ${hovered ? 0.35 : 0.15})`,
-        background: project.gradient,
-        cursor: "pointer",
-        transition:
-          "border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease",
-        transform: hovered ? "translateY(-6px)" : "translateY(0)",
-        boxShadow: hovered
-          ? `0 24px 60px ${project.glow}`
-          : "0 0 0 transparent",
-        position: "relative",
+        borderRadius: 16,
+        overflow: 'hidden',
+        border: '1px solid var(--border)',
+        background: '#ffffff',
+        boxShadow: hovered ? 'var(--shadow-hover)' : 'var(--shadow-sm)',
+        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
+        transition: 'box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease',
+        borderColor: hovered ? 'var(--blue-soft-border)' : 'var(--border)',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <div
+        className="img-zoom"
         style={{
-          padding: "0px 0px 16px",
-          position: "relative",
-          overflow: "hidden",
+          width: '100%',
+          height: 200,
+          position: 'relative',
+          background: 'var(--bg-secondary)',
+          overflow: 'hidden',
         }}
       >
-        {/* Ambient glow */}
-        <div
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
           style={{
-            position: "absolute",
-            inset: 0,
-            background: `radial-gradient(ellipse at 70% 30%, ${project.glow} 0%, transparent 65%)`,
-            opacity: hovered ? 1 : 0.5,
-            transition: "opacity 0.4s ease",
-            pointerEvents: "none",
+            objectFit: 'fill',
+            width: '100%',
+            height: '100%',
+            transition: 'transform 0.5s ease',
+            transform: hovered ? 'scale(1.05)' : 'scale(1)',
           }}
         />
-
-        <div
-          style={{
-            transform: hovered ? "scale(1.03) translateY(-4px)" : "scale(1)",
-            transition: "transform 0.4s ease",
-          }}
-        >
-          {/* ✅ Image instead of Mockup */}
-          <div
-            style={{
-              width: "100%",
-              height: "200px",
-              borderRadius: "12px",
-              overflow: "hidden",
-              position: "relative",
-              background: "#0b2a57", // fallback bg
-            }}
-          >
-            <img
-              src={project.image}
-              alt={project.title}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "fill",
-                transition: "transform 0.5s ease",
-                transform: hovered ? "scale(1.05)" : "scale(1)",
-              }}
-            />
-
-            {/* Optional overlay for better contrast */}
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,0.25), transparent)",
-              }}
-            />
-          </div>
-        </div>
       </div>
 
-      {/* Card content */}
-      <div style={{ padding: "0 28px 28px" }}>
-        {/* Year + category badge */}
+      <div style={{ padding: '24px 28px 28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: "14px",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 12,
           }}
         >
           <span
             style={{
-              fontFamily: "DM Sans, sans-serif",
-              fontSize: "0.72rem",
-              color: "var(--text-muted)",
-              letterSpacing: "0.08em",
+              fontFamily: 'DM Sans, sans-serif',
+              fontSize: '0.72rem',
+              color: 'var(--text-muted)',
+              letterSpacing: '0.06em',
             }}
           >
             {project.year}
           </span>
           <span
             style={{
-              padding: "3px 10px",
-              borderRadius: "100px",
-              background: `rgba(${hexToRgb(project.color)}, 0.12)`,
-              border: `1px solid rgba(${hexToRgb(project.color)}, 0.25)`,
-              fontFamily: "DM Sans, sans-serif",
-              fontSize: "0.68rem",
-              fontWeight: "500",
-              color: project.color,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase" as const,
+              padding: '3px 10px',
+              borderRadius: 100,
+              background: 'var(--blue-soft)',
+              border: '1px solid var(--blue-soft-border)',
+              fontFamily: 'DM Sans, sans-serif',
+              fontSize: '0.68rem',
+              fontWeight: 600,
+              color: 'var(--blue-accent)',
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
             }}
           >
             {project.category}
           </span>
         </div>
 
-        {/* Title + arrow */}
         <div
           style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            marginBottom: "10px",
-            gap: "10px",
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+            gap: 10,
           }}
         >
           <h3
             style={{
-              fontFamily: "Syne, sans-serif",
-              fontSize: "1.35rem",
-              fontWeight: "700",
-              color: "var(--text-primary)",
-              letterSpacing: "-0.02em",
-              lineHeight: 1.15,
+              fontFamily: 'Syne, sans-serif',
+              fontSize: '1.25rem',
+              fontWeight: 700,
+              color: 'var(--text-primary)',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.2,
             }}
           >
             {project.title}
@@ -274,34 +207,33 @@ function ProjectCard({
           )}
         </div>
 
-        {/* Description */}
         <p
           style={{
-            fontFamily: "DM Sans, sans-serif",
-            fontSize: "0.86rem",
-            fontWeight: "300",
-            lineHeight: 1.7,
-            color: "var(--text-secondary)",
-            marginBottom: "20px",
+            fontFamily: 'DM Sans, sans-serif',
+            fontSize: '0.88rem',
+            fontWeight: 400,
+            lineHeight: 1.65,
+            color: 'var(--text-secondary)',
+            marginBottom: 18,
+            flex: 1,
           }}
         >
           {project.description}
         </p>
 
-        {/* Tech tags */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {project.tags.map((tag) => (
             <span
               key={tag}
               style={{
-                padding: "4px 10px",
-                borderRadius: "4px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: "0.68rem",
-                color: "var(--text-muted)",
-                letterSpacing: "0.04em",
+                padding: '4px 10px',
+                borderRadius: 6,
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--border)',
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: '0.68rem',
+                color: 'var(--text-secondary)',
+                letterSpacing: '0.02em',
               }}
             >
               {tag}
@@ -310,156 +242,121 @@ function ProjectCard({
         </div>
       </div>
 
-      {/* Hover overlay bar */}
       <motion.div
         initial={false}
-        animate={{ height: hovered ? "3px" : "0px" }}
+        animate={{ height: hovered ? 3 : 0 }}
         style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: project.accentGrad,
-          borderRadius: "0 0 16px 16px",
-          overflow: "hidden",
+          background: 'var(--blue-accent)',
+          borderRadius: '0 0 16px 16px',
         }}
       />
-    </motion.div>
+    </motion.article>
   );
 }
 
 export default function Works() {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState('All');
   const headingRef = useRef(null);
-  const headingInView = useInView(headingRef, { once: true, margin: "-80px" });
+  const headingInView = useInView(headingRef, { once: true, margin: '-80px' });
 
   const filtered =
-    activeFilter === "All"
+    activeFilter === 'All'
       ? projects
       : projects.filter((p) => p.category === activeFilter);
 
   return (
     <section
       id="works"
-      style={{ padding: "120px 0", position: "relative", overflow: "hidden" }}
+      style={{
+        padding: '110px 0',
+        position: 'relative',
+        background: '#ffffff',
+      }}
     >
-      {/* Bg decoration */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            "linear-gradient(rgba(42, 137, 232, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(42, 137, 232, 0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        className="orb orb-blue"
-        style={{
-          width: "600px",
-          height: "600px",
-          top: "50px",
-          left: "-200px",
-          opacity: 0.3,
-        }}
-      />
-
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}>
-        {/* Header */}
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px' }} className="works-inner">
         <motion.div
           ref={headingRef}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          style={{ marginBottom: "56px" }}
+          transition={{ duration: 0.65 }}
+          style={{ marginBottom: 52 }}
         >
-          <div className="section-label" style={{ marginBottom: "20px" }}>
+          <div className="section-label" style={{ marginBottom: 18 }}>
             Our Work
           </div>
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              flexWrap: "wrap",
-              gap: "28px",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              flexWrap: 'wrap',
+              gap: 28,
             }}
           >
             <h2
+              className="section-title"
               style={{
-                fontFamily: "Syne, sans-serif",
-                fontSize: "clamp(2.2rem, 5vw, 3.5rem)",
-                fontWeight: "800",
-                lineHeight: 1.1,
-                letterSpacing: "-0.03em",
-                color: "var(--text-primary)",
+                fontSize: 'clamp(2rem, 4.5vw, 3.25rem)',
+                lineHeight: 1.12,
+                letterSpacing: '-0.03em',
+                color: 'var(--text-primary)',
               }}
             >
-              Previous{" "}
-              <span
-                style={{
-                  background: "linear-gradient(135deg, #2889e8, #00d4ff)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                Works
-              </span>
+              Previous{' '}
+              <span style={{ color: 'var(--blue-accent)' }}>Works</span>
             </h2>
 
-            {/* Filter tabs */}
             <div
+              role="tablist"
+              aria-label="Filter projects"
               style={{
-                display: "flex",
-                gap: "6px",
-                padding: "5px",
-                borderRadius: "10px",
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(42,137,232,0.12)",
+                display: 'flex',
+                gap: 4,
+                padding: 5,
+                borderRadius: 12,
+                background: 'var(--bg-secondary)',
+                border: '1px solid var(--border)',
               }}
             >
               {categories.map((cat) => (
-                <motion.button
+                <button
                   key={cat}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeFilter === cat}
                   onClick={() => setActiveFilter(cat)}
-                  whileTap={{ scale: 0.96 }}
                   style={{
-                    padding: "8px 18px",
-                    borderRadius: "7px",
-                    border: "none",
-                    cursor: "pointer",
-                    fontFamily: "Syne, sans-serif",
-                    fontWeight: "600",
-                    fontSize: "0.8rem",
-                    letterSpacing: "0.04em",
-                    transition: "all 0.25s ease",
+                    padding: '8px 16px',
+                    borderRadius: 8,
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'Syne, sans-serif',
+                    fontWeight: 600,
+                    fontSize: '0.8rem',
+                    letterSpacing: '0.03em',
+                    transition: 'all 0.2s ease',
                     background:
-                      activeFilter === cat
-                        ? "linear-gradient(135deg, #1a6fc4, #2889e8)"
-                        : "transparent",
-                    color: activeFilter === cat ? "white" : "var(--text-muted)",
+                      activeFilter === cat ? 'var(--blue-accent)' : 'transparent',
+                    color: activeFilter === cat ? '#ffffff' : 'var(--text-secondary)',
                     boxShadow:
                       activeFilter === cat
-                        ? "0 4px 16px rgba(0,212,255,0.2)"
-                        : "none",
+                        ? '0 4px 12px rgba(26, 111, 196, 0.25)'
+                        : 'none',
                   }}
                 >
                   {cat}
-                </motion.button>
+                </button>
               ))}
             </div>
           </div>
         </motion.div>
 
-        {/* Projects grid */}
         <motion.div
           layout
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            gap: "24px",
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+            gap: 24,
           }}
         >
           <AnimatePresence mode="popLayout">
@@ -467,10 +364,10 @@ export default function Works() {
               <motion.div
                 key={project.id}
                 layout
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               >
                 <ProjectCard project={project} index={i} />
               </motion.div>
@@ -478,46 +375,45 @@ export default function Works() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Count indicator */}
         <motion.div
           layout
           style={{
-            marginTop: "40px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "12px",
+            marginTop: 40,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: 12,
+            flexWrap: 'wrap',
           }}
         >
           <span
             style={{
-              fontFamily: "DM Sans, sans-serif",
-              fontSize: "0.82rem",
-              color: "var(--text-muted)",
+              fontFamily: 'DM Sans, sans-serif',
+              fontSize: '0.85rem',
+              color: 'var(--text-muted)',
             }}
           >
-            Showing{" "}
-            <strong style={{ color: "var(--text-secondary)" }}>
+            Showing{' '}
+            <strong style={{ color: 'var(--text-secondary)' }}>
               {filtered.length}
-            </strong>{" "}
+            </strong>{' '}
             of {projects.length} projects
           </span>
           <span
             style={{
-              width: "1px",
-              height: "14px",
-              background: "var(--text-muted)",
-              opacity: 0.3,
+              width: 1,
+              height: 14,
+              background: 'var(--border)',
             }}
           />
           <a
             href="#contact"
             style={{
-              fontFamily: "DM Sans, sans-serif",
-              fontSize: "0.82rem",
-              color: "var(--cyan-pop)",
-              textDecoration: "none",
-              fontWeight: "500",
+              fontFamily: 'DM Sans, sans-serif',
+              fontSize: '0.85rem',
+              color: 'var(--blue-accent)',
+              textDecoration: 'none',
+              fontWeight: 600,
             }}
           >
             Have a project in mind? →
@@ -527,6 +423,7 @@ export default function Works() {
 
       <style>{`
         @media (max-width: 640px) {
+          .works-inner { padding: 0 20px !important; }
           section#works div[style*="gridTemplateColumns"] {
             grid-template-columns: 1fr !important;
           }

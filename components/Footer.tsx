@@ -2,10 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Heart } from 'lucide-react';
-import { FaFacebook, FaLinkedin, FaInstagram } from "react-icons/fa";
-import { FaSquareXTwitter } from "react-icons/fa6";
+import { FaFacebook, FaLinkedin, FaInstagram } from 'react-icons/fa';
+import { FaSquareXTwitter } from 'react-icons/fa6';
 import Image from 'next/image';
-import { a } from 'framer-motion/client';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -24,7 +23,7 @@ const services = [
 
 const socials = [
   { icon: FaFacebook, href: 'https://facebook.com/', label: 'Facebook' },
-  { icon: FaSquareXTwitter , href: 'https://twitter.com/', label: 'X' },
+  { icon: FaSquareXTwitter, href: 'https://twitter.com/', label: 'X' },
   { icon: FaLinkedin, href: 'https://linkedin.com/', label: 'LinkedIn' },
   { icon: FaInstagram, href: 'https://instagram.com/enovix.tech', label: 'Instagram' },
 ];
@@ -33,263 +32,138 @@ export default function Footer() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <footer
-      style={{ position: "relative", marginTop: "100px", overflow: "hidden" }}
-    >
-      {/* Top wave / gradient fade */}
+    <footer style={{ position: 'relative', marginTop: 100, overflow: 'hidden' }}>
       <div
         style={{
-          height: "1px",
+          height: 1,
           background:
-            "linear-gradient(90deg, transparent, rgba(0,212,255,0.3), rgba(40,137,232,0.4), rgba(0,212,255,0.3), transparent)",
-          marginBottom: "0",
+            'linear-gradient(90deg, transparent, var(--border), var(--blue-accent), var(--border), transparent)',
         }}
       />
 
       <div
         style={{
-          background:
-            "linear-gradient(180deg, rgba(2,13,31,0.95) 0%, #010b18 100%)",
-          padding: "72px 0 0",
-          position: "relative",
+          background: 'var(--bg-secondary)',
+          padding: '72px 0 0',
+          position: 'relative',
         }}
       >
-        {/* Orbs */}
-        <div
-          className="orb orb-blue"
-          style={{
-            width: "400px",
-            height: "400px",
-            top: "-100px",
-            left: "-150px",
-            opacity: 0.2,
-          }}
-        />
-        <div
-          className="orb orb-cyan"
-          style={{
-            width: "300px",
-            height: "300px",
-            bottom: "0",
-            right: "-80px",
-            opacity: 0.15,
-          }}
-        />
-
-        <div
-          style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 32px" }}
-        >
-          {/* CTA banner */}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px' }} className="footer-inner">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.65 }}
             style={{
-              padding: "52px 56px",
-              borderRadius: "20px",
-              background:
-                "linear-gradient(135deg, rgba(7,30,61,0.9) 0%, rgba(11,42,87,0.8) 100%)",
-              border: "1px solid rgba(40, 137, 232, 0.2)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "32px",
-              marginBottom: "72px",
-              position: "relative",
-              overflow: "hidden",
+              padding: '48px 52px',
+              borderRadius: 20,
+              background: '#ffffff',
+              border: '1px solid var(--border)',
+              boxShadow: 'var(--shadow-md)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 32,
+              marginBottom: 64,
             }}
+            className="footer-cta"
           >
-            {/* Decorative corner accent */}
-            <div
-              style={{
-                position: "absolute",
-                top: "-30px",
-                right: "-30px",
-                width: "160px",
-                height: "160px",
-                borderRadius: "50%",
-                background:
-                  "radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "1px",
-                background:
-                  "linear-gradient(90deg, transparent, rgba(0,212,255,0.2), transparent)",
-              }}
-            />
-
             <div>
               <div
                 style={{
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: "0.72rem",
-                  fontWeight: "500",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "var(--cyan-pop)",
-                  marginBottom: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
+                  fontFamily: 'DM Sans, sans-serif',
+                  fontSize: '0.72rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: 'var(--blue-accent)',
+                  marginBottom: 12,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
                 }}
               >
                 <span
                   style={{
-                    width: "20px",
-                    height: "1px",
-                    background: "var(--cyan-pop)",
-                    display: "inline-block",
+                    width: 20,
+                    height: 2,
+                    background: 'var(--blue-accent)',
+                    display: 'inline-block',
+                    borderRadius: 2,
                   }}
                 />
                 Ready to Build?
               </div>
               <h3
+                className="section-title"
                 style={{
-                  fontFamily: "Syne, sans-serif",
-                  fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
-                  fontWeight: "800",
-                  color: "var(--text-primary)",
-                  letterSpacing: "-0.03em",
-                  lineHeight: 1.15,
-                  maxWidth: "440px",
+                  fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
+                  color: 'var(--text-primary)',
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1.2,
+                  maxWidth: 440,
                 }}
               >
-                Let&apos;s turn your idea into a{" "}
-                <span
-                  style={{
-                    background: "linear-gradient(135deg, #2889e8, #00d4ff)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  digital reality.
-                </span>
+                Let&apos;s turn your idea into a{' '}
+                <span style={{ color: 'var(--blue-accent)' }}>digital reality.</span>
               </h3>
             </div>
 
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <motion.a
-                href="#contact"
-                whileHover={{ scale: 1.04, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  textDecoration: "none",
-                  padding: "14px 32px",
-                  borderRadius: "6px",
-                  background: "linear-gradient(135deg, #1a6fc4, #2889e8)",
-                  color: "white",
-                  fontFamily: "Syne, sans-serif",
-                  fontWeight: "700",
-                  fontSize: "0.85rem",
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  boxShadow: "0 8px 30px rgba(0,212,255,0.25)",
-                }}
-              >
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <a href="#contact" className="btn-primary">
                 Start a Project
                 <ArrowUpRight size={16} />
-              </motion.a>
-              <motion.a
+              </a>
+              <a
                 href="mailto:contact.enovix@gmail.com"
-                whileHover={{ scale: 1.04, y: -2 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  textDecoration: "none",
-                  padding: "14px 28px",
-                  borderRadius: "6px",
-                  border: "1px solid rgba(42,137,232,0.3)",
-                  background: "transparent",
-                  color: "var(--blue-bright)",
-                  fontFamily: "Syne, sans-serif",
-                  fontWeight: "600",
-                  fontSize: "0.85rem",
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                }}
+                className="btn-outline"
               >
                 Email Us
-              </motion.a>
+              </a>
             </div>
           </motion.div>
 
-          {/* Footer columns */}
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "1.8fr 1fr 1fr 1fr",
-              gap: "40px",
-              paddingBottom: "52px",
-              borderBottom: "1px solid rgba(42,137,232,0.1)",
+              display: 'grid',
+              gridTemplateColumns: '1.8fr 1fr 1fr 1fr',
+              gap: 40,
+              paddingBottom: 48,
+              borderBottom: '1px solid var(--border)',
             }}
             className="footer-grid"
           >
-            {/* Brand column */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.45 }}
             >
-              {/* Logo — same placeholder as Navbar */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  marginBottom: "18px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "98px",
-                    height: "28px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "16px",
-                    fontFamily: "Syne, sans-serif",
-                    fontWeight: "800",
-                  }}
-                >
-                  <Image
-                    src="/enovix_logo.png"
-                    alt="Enovix"
-                    width={140}
-                    height={40}
-                  />
-                </div>
+              <div style={{ marginBottom: 18 }}>
+                <Image
+                  src="/enovix_logo.png"
+                  alt="Enovix"
+                  width={140}
+                  height={40}
+                />
               </div>
 
               <p
                 style={{
-                  fontFamily: "DM Sans, sans-serif",
-                  fontSize: "0.88rem",
-                  fontWeight: "300",
-                  lineHeight: 1.75,
-                  color: "var(--text-secondary)",
-                  maxWidth: "280px",
-                  marginBottom: "24px",
+                  fontFamily: 'DM Sans, sans-serif',
+                  fontSize: '0.9rem',
+                  lineHeight: 1.7,
+                  color: 'var(--text-secondary)',
+                  maxWidth: 280,
+                  marginBottom: 24,
                 }}
               >
                 A freelance tech team building world-class web and mobile
                 products. Turning ideas into polished digital experiences.
               </p>
 
-              {/* Social icons */}
-              <div style={{ display: "flex", gap: "10px" }}>
+              <div style={{ display: 'flex', gap: 10 }}>
                 {socials.map((s) => {
                   const Icon = s.icon;
                   return (
@@ -298,40 +172,34 @@ export default function Footer() {
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      whileHover={{ y: -3, scale: 1.1 }}
-                      whileTap={{ scale: 0.93 }}
+                      whileHover={{ y: -3, scale: 1.06 }}
+                      whileTap={{ scale: 0.95 }}
                       title={s.label}
+                      aria-label={s.label}
                       style={{
-                        width: "36px",
-                        height: "36px",
-                        borderRadius: "8px",
-                        background: "rgba(255,255,255,0.04)",
-                        border: "1px solid rgba(42,137,232,0.15)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        color: "var(--text-muted)",
-                        transition: "all 0.2s ease",
+                        width: 38,
+                        height: 38,
+                        borderRadius: 10,
+                        background: '#ffffff',
+                        border: '1px solid var(--border)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--text-secondary)',
+                        transition: 'all 0.2s ease',
+                        boxShadow: 'var(--shadow-sm)',
                       }}
                       onMouseEnter={(e) => {
-                        (
-                          e.currentTarget as HTMLAnchorElement
-                        ).style.borderColor = "rgba(0,212,255,0.35)";
-                        (e.currentTarget as HTMLAnchorElement).style.color =
-                          "var(--cyan-pop)";
-                        (
-                          e.currentTarget as HTMLAnchorElement
-                        ).style.background = "rgba(0,212,255,0.06)";
+                        const el = e.currentTarget as HTMLAnchorElement;
+                        el.style.borderColor = 'var(--blue-accent)';
+                        el.style.color = 'var(--blue-accent)';
+                        el.style.background = 'var(--blue-soft)';
                       }}
                       onMouseLeave={(e) => {
-                        (
-                          e.currentTarget as HTMLAnchorElement
-                        ).style.borderColor = "rgba(42,137,232,0.15)";
-                        (e.currentTarget as HTMLAnchorElement).style.color =
-                          "var(--text-muted)";
-                        (
-                          e.currentTarget as HTMLAnchorElement
-                        ).style.background = "rgba(255,255,255,0.04)";
+                        const el = e.currentTarget as HTMLAnchorElement;
+                        el.style.borderColor = 'var(--border)';
+                        el.style.color = 'var(--text-secondary)';
+                        el.style.background = '#ffffff';
                       }}
                     >
                       <Icon size={15} />
@@ -341,58 +209,58 @@ export default function Footer() {
               </div>
             </motion.div>
 
-            {/* Navigation column */}
-            <FooterCol title="Navigate" links={navLinks} delay={0.1} />
+            <FooterCol title="Navigate" links={navLinks} delay={0.08} />
+            <FooterCol title="Services" links={services} delay={0.15} />
 
-            {/* Services column */}
-            <FooterCol title="Services" links={services} delay={0.2} />
-
-            {/* Contact column */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              transition={{ duration: 0.45, delay: 0.22 }}
             >
               <h4
                 style={{
-                  fontFamily: "Syne, sans-serif",
-                  fontSize: "0.8rem",
-                  fontWeight: "700",
-                  color: "var(--text-primary)",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  marginBottom: "20px",
+                  fontFamily: 'Syne, sans-serif',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  color: 'var(--text-primary)',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  marginBottom: 18,
                 }}
               >
                 Contact
               </h4>
               {[
-                { label: "contact.enovix@gmail.com", href: "mailto:contact.enovix@gmail.com" },
-                { label: "+91 95269 52719", href: "tel:+919526952719" },
-                { label: "+91 79940 78089", href: "tel:+917994078089" },
-                { label: "+91 99471 17079", href: "tel:+919947117079" },
-                { label: "Kerala, India", href: "" },
+                {
+                  label: 'contact.enovix@gmail.com',
+                  href: 'mailto:contact.enovix@gmail.com',
+                },
+                { label: '+91 95269 52719', href: 'tel:+919526952719' },
+                { label: '+91 79940 78089', href: 'tel:+917994078089' },
+                { label: '+91 99471 17079', href: 'tel:+919947117079' },
+                { label: 'Kerala, India', href: '' },
               ].map((item) => (
                 <a
                   key={item.label}
-                  href={item.href}
+                  href={item.href || undefined}
                   style={{
-                    display: "block",
-                    fontFamily: "DM Sans, sans-serif",
-                    fontSize: "0.86rem",
-                    fontWeight: "300",
-                    color: "var(--text-secondary)",
-                    textDecoration: "none",
-                    marginBottom: "10px",
-                    transition: "color 0.2s ease",
+                    display: 'block',
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: '0.88rem',
+                    color: 'var(--text-secondary)',
+                    textDecoration: 'none',
+                    marginBottom: 10,
+                    transition: 'color 0.2s ease',
+                    cursor: item.href ? 'pointer' : 'default',
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--cyan-pop)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "var(--text-secondary)")
-                  }
+                  onMouseEnter={(e) => {
+                    if (item.href)
+                      e.currentTarget.style.color = 'var(--blue-accent)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = 'var(--text-secondary)';
+                  }}
                 >
                   {item.label}
                 </a>
@@ -400,26 +268,25 @@ export default function Footer() {
             </motion.div>
           </div>
 
-          {/* Bottom bar */}
           <div
             style={{
-              padding: "24px 0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: "16px",
+              padding: '24px 0',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 16,
             }}
           >
             <p
               style={{
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: "0.78rem",
-                color: "var(--text-muted)",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                flexWrap: "wrap",
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: '0.8rem',
+                color: 'var(--text-muted)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+                flexWrap: 'wrap',
               }}
             >
               © {new Date().getFullYear()} Enovix. Crafted with
@@ -427,44 +294,46 @@ export default function Footer() {
                 size={12}
                 fill="#ec4899"
                 color="#ec4899"
-                style={{ display: "inline" }}
+                style={{ display: 'inline' }}
               />
               in Kerala, India.
             </p>
 
-            {/* Back to top */}
             <motion.button
+              type="button"
               onClick={scrollToTop}
-              whileHover={{ y: -2, scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ y: -2, scale: 1.03 }}
+              whileTap={{ scale: 0.96 }}
+              aria-label="Back to top"
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                background: "none",
-                border: "1px solid rgba(42,137,232,0.2)",
-                borderRadius: "6px",
-                padding: "7px 14px",
-                cursor: "pointer",
-                color: "var(--text-muted)",
-                fontFamily: "DM Sans, sans-serif",
-                fontSize: "0.75rem",
-                fontWeight: "500",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                transition: "all 0.2s ease",
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                background: '#ffffff',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                padding: '8px 14px',
+                cursor: 'pointer',
+                color: 'var(--text-secondary)',
+                fontFamily: 'DM Sans, sans-serif',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                transition: 'all 0.2s ease',
+                boxShadow: 'var(--shadow-sm)',
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.borderColor =
-                  "rgba(0,212,255,0.35)";
+                  'var(--blue-accent)';
                 (e.currentTarget as HTMLButtonElement).style.color =
-                  "var(--cyan-pop)";
+                  'var(--blue-accent)';
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLButtonElement).style.borderColor =
-                  "rgba(42,137,232,0.2)";
+                  'var(--border)';
                 (e.currentTarget as HTMLButtonElement).style.color =
-                  "var(--text-muted)";
+                  'var(--text-secondary)';
               }}
             >
               ↑ Back to Top
@@ -479,30 +348,41 @@ export default function Footer() {
         }
         @media (max-width: 560px) {
           .footer-grid { grid-template-columns: 1fr !important; }
-          footer div[style*="padding: '52px 56px'"] { padding: 28px 24px !important; }
+          .footer-cta { padding: 28px 22px !important; }
+          .footer-inner { padding: 0 20px !important; }
         }
       `}</style>
     </footer>
   );
 }
 
-function FooterCol({ title, links, delay }: { title: string; links: { label: string; href: string }[]; delay: number }) {
+function FooterCol({
+  title,
+  links,
+  delay,
+}: {
+  title: string;
+  links: { label: string; href: string }[];
+  delay: number;
+}) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay }}
+      transition={{ duration: 0.45, delay }}
     >
-      <h4 style={{
-        fontFamily: 'Syne, sans-serif',
-        fontSize: '0.8rem',
-        fontWeight: '700',
-        color: 'var(--text-primary)',
-        letterSpacing: '0.12em',
-        textTransform: 'uppercase',
-        marginBottom: '20px',
-      }}>
+      <h4
+        style={{
+          fontFamily: 'Syne, sans-serif',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          color: 'var(--text-primary)',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase',
+          marginBottom: 18,
+        }}
+      >
         {title}
       </h4>
       {links.map((link) => (
@@ -512,20 +392,21 @@ function FooterCol({ title, links, delay }: { title: string; links: { label: str
           style={{
             display: 'block',
             fontFamily: 'DM Sans, sans-serif',
-            fontSize: '0.86rem',
-            fontWeight: '300',
+            fontSize: '0.88rem',
             color: 'var(--text-secondary)',
             textDecoration: 'none',
-            marginBottom: '10px',
+            marginBottom: 10,
             transition: 'color 0.2s ease, padding-left 0.2s ease',
           }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)';
-            (e.currentTarget as HTMLAnchorElement).style.paddingLeft = '6px';
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.color = 'var(--blue-accent)';
+            el.style.paddingLeft = '4px';
           }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)';
-            (e.currentTarget as HTMLAnchorElement).style.paddingLeft = '0px';
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.color = 'var(--text-secondary)';
+            el.style.paddingLeft = '0px';
           }}
         >
           {link.label}
