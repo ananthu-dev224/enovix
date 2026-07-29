@@ -22,7 +22,7 @@ const projects = [
   },
   {
     id: 2,
-    title: 'Medrec-Q Dictate',
+    title: 'Medrec-Q Dictate iOS',
     category: 'iOS',
     tags: ['Flutter', 'Hive', 'API Integration', 'Appstore'],
     description:
@@ -63,19 +63,18 @@ function ProjectCard({
   index: number;
 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
   const [hovered, setHovered] = useState(false);
   const hasLink = Boolean(project.link && project.link !== '#');
 
   const arrowButton = (
     <motion.div
       animate={{ rotate: hovered ? 45 : 0, scale: hovered ? 1.08 : 1 }}
-      transition={{ duration: 0.25 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       style={{
-        width: 32,
-        height: 32,
-        borderRadius: 8,
-        background: 'var(--blue-soft)',
+        width: 42,
+        height: 42,
+        borderRadius: 12,
+        background: hovered ? 'var(--blue-accent)' : 'var(--blue-soft)',
         border: '1px solid var(--blue-soft-border)',
         display: 'flex',
         alignItems: 'center',
@@ -83,171 +82,91 @@ function ProjectCard({
         flexShrink: 0,
         cursor: hasLink ? 'pointer' : 'default',
         opacity: hasLink ? 1 : 0.6,
+        transition: 'background-color 0.25s ease, border-color 0.25s ease',
       }}
     >
-      <ArrowUpRight size={15} color="var(--blue-accent)" />
+      <ArrowUpRight size={16} color={hovered ? '#ffffff' : 'var(--blue-accent)'} />
     </motion.div>
   );
 
   return (
     <motion.article
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.6,
-        delay: (index % 3) * 0.1,
-        ease: [0.22, 1, 0.36, 1],
-      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 16,
+        borderRadius: 24,
         overflow: 'hidden',
-        border: '1px solid var(--border)',
-        background: '#ffffff',
-        boxShadow: hovered ? 'var(--shadow-hover)' : 'var(--shadow-sm)',
-        transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
-        transition: 'box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease',
-        borderColor: hovered ? 'var(--blue-soft-border)' : 'var(--border)',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
       }}
+      className="project-card"
     >
-      <div
-        className="img-zoom"
-        style={{
-          width: '100%',
-          height: 200,
-          position: 'relative',
-          background: 'var(--bg-secondary)',
-          overflow: 'hidden',
-        }}
-      >
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          style={{
-            objectFit: 'fill',
-            width: '100%',
-            height: '100%',
-            transition: 'transform 0.5s ease',
-            transform: hovered ? 'scale(1.05)' : 'scale(1)',
-          }}
-        />
-      </div>
+      <div className="project-card-inner">
+        {/* Left Column: Content */}
+        <div className="project-card-content">
+          <div className="project-card-header">
+            <span className="project-card-year">{project.year}</span>
+            <span className="project-card-category">{project.category}</span>
+          </div>
 
-      <div style={{ padding: '24px 28px 28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 12,
-          }}
-        >
-          <span
-            style={{
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: '0.72rem',
-              color: 'var(--text-muted)',
-              letterSpacing: '0.06em',
-            }}
-          >
-            {project.year}
-          </span>
-          <span
-            style={{
-              padding: '3px 10px',
-              borderRadius: 100,
-              background: 'var(--blue-soft)',
-              border: '1px solid var(--blue-soft-border)',
-              fontFamily: 'DM Sans, sans-serif',
-              fontSize: '0.68rem',
-              fontWeight: 600,
-              color: 'var(--blue-accent)',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-            }}
-          >
-            {project.category}
-          </span>
+          <div className="project-card-title-row">
+            <h3 className="project-card-title">{project.title}</h3>
+            {hasLink ? (
+              <Link href={project.link} target="_blank" rel="noopener noreferrer">
+                {arrowButton}
+              </Link>
+            ) : (
+              arrowButton
+            )}
+          </div>
+
+          <p className="project-card-description">{project.description}</p>
+
+          <div className="project-card-tags">
+            {project.tags.map((tag) => (
+              <span key={tag} className="tag-badge">
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            marginBottom: 10,
-            gap: 10,
-          }}
-        >
-          <h3
-            style={{
-              fontFamily: 'Syne, sans-serif',
-              fontSize: '1.25rem',
-              fontWeight: 700,
-              color: 'var(--text-primary)',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.2,
-            }}
-          >
-            {project.title}
-          </h3>
-          {hasLink ? (
-            <Link href={project.link} target="_blank" rel="noopener noreferrer">
-              {arrowButton}
-            </Link>
-          ) : (
-            arrowButton
-          )}
-        </div>
-
-        <p
-          style={{
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '0.88rem',
-            fontWeight: 400,
-            lineHeight: 1.65,
-            color: 'var(--text-secondary)',
-            marginBottom: 18,
-            flex: 1,
-          }}
-        >
-          {project.description}
-        </p>
-
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
+        {/* Right Column: Image Preview */}
+        <div className="project-card-image-wrapper">
+          <div className="project-card-image-gradient">
+            <div
+              className="project-card-image-container"
               style={{
-                padding: '4px 10px',
-                borderRadius: 6,
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border)',
-                fontFamily: 'DM Sans, sans-serif',
-                fontSize: '0.68rem',
-                color: 'var(--text-secondary)',
-                letterSpacing: '0.02em',
+                transform: hovered ? 'scale(1.04) translateY(-4px)' : 'scale(1) translateY(0)',
               }}
             >
-              {tag}
-            </span>
-          ))}
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                style={{
+                  objectFit: 'contain',
+                  filter: hovered 
+                    ? 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.12))' 
+                    : 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.06))',
+                  transition: 'filter 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       <motion.div
         initial={false}
-        animate={{ height: hovered ? 3 : 0 }}
+        animate={{ height: hovered ? 4 : 0 }}
         style={{
           background: 'var(--blue-accent)',
-          borderRadius: '0 0 16px 16px',
+          borderRadius: '0 0 24px 24px',
+          width: '100%',
         }}
       />
     </motion.article>
@@ -318,35 +237,53 @@ export default function Works() {
                 border: '1px solid var(--border)',
               }}
             >
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  role="tab"
-                  aria-selected={activeFilter === cat}
-                  onClick={() => setActiveFilter(cat)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: 8,
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '0.8rem',
-                    letterSpacing: '0.03em',
-                    transition: 'all 0.2s ease',
-                    background:
-                      activeFilter === cat ? 'var(--blue-accent)' : 'transparent',
-                    color: activeFilter === cat ? '#ffffff' : 'var(--text-secondary)',
-                    boxShadow:
-                      activeFilter === cat
-                        ? '0 4px 12px rgba(26, 111, 196, 0.25)'
-                        : 'none',
-                  }}
-                >
-                  {cat}
-                </button>
-              ))}
+              {categories.map((cat) => {
+                const isActive = activeFilter === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActiveFilter(cat)}
+                    style={{
+                      position: 'relative',
+                      padding: '8px 18px',
+                      borderRadius: 8,
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontFamily: 'Syne, sans-serif',
+                      fontWeight: 600,
+                      fontSize: '0.8rem',
+                      letterSpacing: '0.03em',
+                      transition: 'color 0.25s ease',
+                      background: 'transparent',
+                      color: isActive ? '#ffffff' : 'var(--text-secondary)',
+                      outline: 'none',
+                      zIndex: 1,
+                    }}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeFilterTab"
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: 'var(--blue-accent)',
+                          borderRadius: 8,
+                          boxShadow: '0 4px 12px rgba(26, 111, 196, 0.25)',
+                          zIndex: -1,
+                        }}
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    {cat}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </motion.div>
@@ -354,9 +291,10 @@ export default function Works() {
         <motion.div
           layout
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: 24,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '40px',
+            paddingBottom: '80px',
           }}
         >
           <AnimatePresence mode="popLayout">
@@ -364,10 +302,19 @@ export default function Works() {
               <motion.div
                 key={project.id}
                 layout
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ opacity: 0, y: 40, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98, y: -20 }}
+                transition={{
+                  duration: 0.55,
+                  delay: i * 0.05,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                style={{
+                  top: 'calc(var(--nav-height, 72px) + 90px + ' + (i * 28) + 'px)',
+                  zIndex: i + 1,
+                }}
+                className="project-card-wrapper"
               >
                 <ProjectCard project={project} index={i} />
               </motion.div>
@@ -422,11 +369,192 @@ export default function Works() {
       </div>
 
       <style>{`
+        .project-card-inner {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          width: 100%;
+          height: 100%;
+        }
+
+        @media (min-width: 1024px) {
+          .project-card-inner {
+            flex-direction: row;
+          }
+        }
+
+        .project-card {
+          background: #ffffff;
+          border: 1px solid var(--border);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+          transition: box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1), 
+                      border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .project-card:hover {
+          border-color: var(--blue-soft-border);
+          box-shadow: var(--shadow-hover);
+          transform: translateY(-4px);
+        }
+
+        .project-card-content {
+          display: flex;
+          flex-direction: column;
+          padding: 32px 28px;
+          flex: 1.25;
+        }
+
+        @media (min-width: 1024px) {
+          .project-card-content {
+            padding: 44px 48px;
+          }
+        }
+
+        .project-card-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 16px;
+        }
+
+        .project-card-year {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: var(--text-muted);
+          letter-spacing: 0.06em;
+        }
+
+        .project-card-category {
+          padding: 4px 12px;
+          border-radius: 100px;
+          background: var(--blue-soft);
+          border: 1px solid var(--blue-soft-border);
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.72rem;
+          font-weight: 600;
+          color: var(--blue-accent);
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+
+        .project-card-title-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          margin-bottom: 16px;
+        }
+
+        .project-card-title {
+          font-family: 'Syne', sans-serif;
+          font-size: 1.45rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          letter-spacing: -0.02em;
+          line-height: 1.25;
+        }
+
+        @media (min-width: 1024px) {
+          .project-card-title {
+            font-size: 1.75rem;
+          }
+        }
+
+        .project-card-description {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.92rem;
+          font-weight: 400;
+          line-height: 1.7;
+          color: var(--text-secondary);
+          margin-bottom: 24px;
+          flex: 1;
+        }
+
+        .project-card-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .tag-badge {
+          padding: 5px 12px;
+          border-radius: 8px;
+          background: rgba(26, 111, 196, 0.03);
+          border: 1px solid rgba(26, 111, 196, 0.08);
+          font-family: 'DM Sans', sans-serif;
+          font-size: 0.72rem;
+          font-weight: 500;
+          color: var(--blue-accent);
+          transition: all 0.25s ease;
+        }
+
+        .project-card:hover .tag-badge {
+          background: rgba(26, 111, 196, 0.07);
+          border-color: rgba(26, 111, 196, 0.15);
+        }
+
+        .project-card-image-wrapper {
+          flex: 1;
+          position: relative;
+          min-height: 240px;
+          overflow: hidden;
+          order: -1;
+        }
+
+        @media (min-width: 1024px) {
+          .project-card-image-wrapper {
+            min-height: 100%;
+            order: 0;
+          }
+        }
+
+        .project-card-image-gradient {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(26, 111, 196, 0.04) 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+        }
+
+        @media (min-width: 1024px) {
+          .project-card-image-gradient {
+            padding: 44px;
+          }
+        }
+
+        .project-card-image-container {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+          min-height: 200px;
+        }
+
+        @media (min-width: 1024px) {
+          .project-card-image-container {
+            min-height: auto;
+          }
+        }
+
+        .project-card-wrapper {
+          position: relative;
+        }
+
+        @media (min-width: 1024px) {
+          .project-card-wrapper {
+            position: sticky;
+          }
+        }
+
         @media (max-width: 640px) {
           .works-inner { padding: 0 20px !important; }
-          section#works div[style*="gridTemplateColumns"] {
-            grid-template-columns: 1fr !important;
-          }
         }
       `}</style>
     </section>
