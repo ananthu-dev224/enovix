@@ -22,7 +22,7 @@ const projects = [
   },
   {
     id: 2,
-    title: 'Medrec-Q Dictate',
+    title: 'Medrec-Q Dictate iOS',
     category: 'iOS',
     tags: ['Flutter', 'Hive', 'API Integration', 'Appstore'],
     description:
