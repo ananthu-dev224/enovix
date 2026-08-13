@@ -18,6 +18,8 @@ const projects = [
       'A voice dictation application designed for the medical field, enabling users to record, send, and manage dictations efficiently. Features include dictation listing, resend and override options, priority tagging, comments, and customizable profile and settings management.',
     year: '2026',
     image: '/medrecq.jpg',
+    imageWidth: 1600,
+    imageHeight: 800,
     link: 'https://play.google.com/store/apps/details?id=app.medrec_q.dictate',
   },
   {
@@ -29,6 +31,8 @@ const projects = [
       'A voice dictation application designed for the medical field, enabling users to record, send, and manage dictations efficiently. Features include dictation listing, resend and override options, priority tagging, comments, and customizable profile and settings management.',
     year: '2026',
     image: '/medrecq_ios.jpg',
+    imageWidth: 1121,
+    imageHeight: 858,
     link: 'https://apps.apple.com/us/app/medrec-q-dictate/id6759154532',
   },
   {
@@ -40,6 +44,8 @@ const projects = [
       'A cross-platform desktop dictation app built with Electron.js for medical professionals. The app features a floating always-on-top recorder that works seamlessly over other applications.',
     year: '2026',
     image: '/desktop-app-2.png',
+    imageWidth: 1536,
+    imageHeight: 1024,
     link: '',
   },
   {
@@ -51,6 +57,8 @@ const projects = [
       'A web-based dictation platform with role-based access, AI transcription, rich text editing, report review, and seamless submission. Powered by Artificial Intelligence.',
     year: '2026',
     image: '/dms.png',
+    imageWidth: 1883,
+    imageHeight: 1070,
     link: 'https://dms.medrecq.com/',
   },
 ];
@@ -136,24 +144,14 @@ function ProjectCard({
         {/* Right Column: Image Preview */}
         <div className="project-card-image-wrapper">
           <div className="project-card-image-gradient">
-            <div
-              className="project-card-image-container"
-              style={{
-                transform: hovered ? 'scale(1.04) translateY(-4px)' : 'scale(1) translateY(0)',
-              }}
-            >
+            <div className="project-card-image-container">
               <Image
                 src={project.image}
                 alt={project.title}
-                fill
+                width={project.imageWidth}
+                height={project.imageHeight}
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                style={{
-                  objectFit: 'contain',
-                  filter: hovered 
-                    ? 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.12))' 
-                    : 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.06))',
-                  transition: 'filter 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
-                }}
+                className="project-card-image"
               />
             </div>
           </div>
@@ -501,26 +499,26 @@ export default function Works() {
           min-height: 240px;
           overflow: hidden;
           order: -1;
+          display: flex;
         }
 
         @media (min-width: 1024px) {
           .project-card-image-wrapper {
             min-height: 100%;
+            align-self: stretch;
             order: 0;
           }
         }
 
         .project-card-image-gradient {
-          position: absolute;
-          top: 0;
-          left: 0;
           width: 100%;
           height: 100%;
+          min-height: inherit;
           background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(26, 111, 196, 0.04) 100%);
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 24px;
+          padding: 20px;
         }
 
         @media (min-width: 1024px) {
@@ -533,13 +531,69 @@ export default function Works() {
           position: relative;
           width: 100%;
           height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-          min-height: 200px;
         }
 
-        @media (min-width: 1024px) {
+        .project-card:hover .project-card-image-container {
+          transform: scale(1.03);
+        }
+
+        .project-card-image {
+          width: 100% !important;
+          height: 100% !important;
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+          object-position: center center;
+          filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.06));
+          transition: filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .project-card:hover .project-card-image {
+          filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.12));
+        }
+
+        @media (max-width: 768px) {
+          .project-card-image-wrapper {
+            flex: none;
+            width: 100%;
+            min-height: 0;
+            height: auto;
+            overflow: hidden;
+          }
+
+          .project-card-image-gradient {
+            height: auto;
+            min-height: 0;
+            padding: 0;
+            display: block;
+            background: var(--bg-secondary);
+          }
+
           .project-card-image-container {
-            min-height: auto;
+            display: block;
+            width: 100%;
+            height: auto;
+            min-height: 0;
+          }
+
+          .project-card:hover .project-card-image-container {
+            transform: none;
+          }
+
+          .project-card-image,
+          .project-card:hover .project-card-image {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100%;
+            max-height: none;
+            object-fit: contain;
+            object-position: center center;
+            filter: none;
           }
         }
 

@@ -174,7 +174,7 @@ export default function Hero() {
         /* Tablet / smaller desktop: true 16:9 so artwork never crops */
         @media (min-width: 769px) and (max-width: 1199px) {
           .hero-section {
-            padding-top: var(--nav-height);
+            padding-top: 0;
           }
 
           .hero-slide {
@@ -322,7 +322,7 @@ export default function Hero() {
 
         @media (max-width: 768px) {
           .hero-section {
-            padding-top: 64px;
+            padding-top: 0;
           }
 
           .hero-desktop {

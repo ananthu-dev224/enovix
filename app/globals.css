@@ -22,7 +22,7 @@
   --shadow-lg: 0 12px 40px rgba(17, 24, 39, 0.08), 0 4px 12px rgba(17, 24, 39, 0.04);
   --shadow-hover: 0 20px 48px rgba(17, 24, 39, 0.1), 0 8px 16px rgba(17, 24, 39, 0.06);
   --radius-card: 16px;
-  --nav-height: 72px;
+  --nav-height: 56px;
 }
 
 * {
@@ -33,7 +33,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 88px;
+  scroll-padding-top: 64px;
 }
 
 body {
