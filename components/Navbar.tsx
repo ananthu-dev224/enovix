@@ -48,7 +48,7 @@ export default function Navbar() {
     const id = href.replace('#', '');
     const el = document.getElementById(id);
     if (!el) return;
-    const navOffset = 80;
+    const navOffset = 56;
     const top = el.getBoundingClientRect().top + window.scrollY - navOffset;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     window.history.pushState(null, '', href);
@@ -86,14 +86,15 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 900,
-          background: solid ? '#ffffff' : 'rgba(255, 255, 255, 0.92)',
-          backdropFilter: 'blur(12px)',
+          background: solid ? '#ffffff' : 'transparent',
+          backdropFilter: solid ? 'blur(12px)' : 'none',
+          WebkitBackdropFilter: solid ? 'blur(12px)' : 'none',
           boxShadow: scrolled
             ? '0 4px 24px rgba(17, 24, 39, 0.06)'
             : 'none',
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: solid ? '1px solid #e5e7eb' : '1px solid transparent',
           transition:
-            'box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease',
+            'box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease',
         }}
       >
         <div
@@ -101,12 +102,12 @@ export default function Navbar() {
           style={{
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: scrolled ? '12px 20px' : '16px 20px',
+            padding: '8px 20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             transition: 'padding 0.3s ease',
-            minHeight: 72,
+            minHeight: 56,
           }}
         >
           <a
@@ -119,9 +120,10 @@ export default function Navbar() {
               <Image
                 src="/enovix_logo.png"
                 alt="Enovix"
-                width={140}
-                height={40}
+                width={112}
+                height={32}
                 priority
+                style={{ width: 112, height: 'auto' }}
               />
             </motion.div>
           </a>
@@ -165,8 +167,8 @@ export default function Navbar() {
               className="btn-primary"
               style={{
                 marginLeft: '8px',
-                padding: '10px 22px',
-                fontSize: '0.78rem',
+                padding: '8px 18px',
+                fontSize: '0.75rem',
               }}
             >
               Get In Touch
@@ -185,7 +187,8 @@ export default function Navbar() {
               borderRadius: '10px',
               cursor: 'pointer',
               color: 'var(--text-primary)',
-              padding: '8px',
+              padding: '6px',
+              borderColor: solid ? 'var(--border)' : 'rgba(17, 24, 39, 0.12)',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
@@ -210,7 +213,7 @@ export default function Navbar() {
                 borderTop: '1px solid var(--border)',
               }}
             >
-              <div style={{ padding: '8px 0 24px', maxHeight: 'calc(100vh - 72px)', overflowY: 'auto' }}>
+              <div style={{ padding: '8px 0 24px', maxHeight: 'calc(100vh - 56px)', overflowY: 'auto' }}>
                 {navLinks.map((link, i) => (
                   <motion.a
                     key={link.href}
@@ -267,9 +270,9 @@ export default function Navbar() {
           .nav-inner {
             padding-left: 16px !important;
             padding-right: 16px !important;
-            padding-top: 12px !important;
-            padding-bottom: 12px !important;
-            min-height: 64px !important;
+            padding-top: 6px !important;
+            padding-bottom: 6px !important;
+            min-height: 52px !important;
           }
         }
         @media (min-width: 769px) {
