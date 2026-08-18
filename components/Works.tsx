@@ -50,11 +50,11 @@ const projects = [
   },
   {
     id: 5,
-    title: 'Medrec-Q Dictation Management System',
+    title: 'DMS',
     category: 'Web',
-    tags: ['Next.js', 'Node.js', 'AI Transcription', 'Role-Based Access'],
+    tags: ['React.js', 'Node.js', 'AssemblyAI', 'Footpedal Support', 'Role-Based Access'],
     description:
-      'A web-based dictation platform with role-based access, AI transcription, rich text editing, report review, and seamless submission. Powered by Artificial Intelligence.',
+      'A web-based dictation platform with role-based access, AssemblyAI transcription, integrated footpedal support, rich text editing, report review, and seamless submission. A refinement layer uses saved user profiles so transcriptions are tailored and improved from each user’s data.',
     year: '2026',
     image: '/dms.png',
     imageWidth: 1883,
