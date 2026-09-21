@@ -148,10 +148,11 @@ export default function Navbar() {
                   fontFamily: 'DM Sans, sans-serif',
                   fontSize: '0.9rem',
                   fontWeight: activeLink === link.href ? 600 : 500,
-                  color:
-                    activeLink === link.href
+                  color: solid
+                    ? activeLink === link.href
                       ? 'var(--blue-accent)'
-                      : 'var(--text-secondary)',
+                      : 'var(--text-secondary)'
+                    : '#ffffff',
                   transition: 'color 0.2s ease',
                 }}
               >
@@ -186,9 +187,9 @@ export default function Navbar() {
               border: '1px solid var(--border)',
               borderRadius: '10px',
               cursor: 'pointer',
-              color: 'var(--text-primary)',
+              color: solid ? 'var(--text-primary)' : '#ffffff',
               padding: '6px',
-              borderColor: solid ? 'var(--border)' : 'rgba(17, 24, 39, 0.12)',
+              borderColor: solid ? 'var(--border)' : 'rgba(255, 255, 255, 0.3)',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
@@ -264,7 +265,7 @@ export default function Navbar() {
       </motion.nav>
 
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
           .nav-inner {
@@ -275,7 +276,7 @@ export default function Navbar() {
             min-height: 52px !important;
           }
         }
-        @media (min-width: 769px) {
+        @media (min-width: 641px) {
           .mobile-menu-panel { display: none !important; }
         }
       `}</style>

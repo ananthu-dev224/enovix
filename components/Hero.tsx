@@ -4,27 +4,18 @@ import { useCallback, useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
 
-const banners = [
-  {
-    src: '/banner-1-latest.png',
-    alt: 'Enovix digital solutions — banner 1',
-  },
-  {
-    src: '/banner-2.png',
-    alt: 'Enovix digital solutions — banner 2',
-  },
-  {
-    src: '/banner-3-latest.png',
-    alt: 'Enovix digital solutions — banner 3',
-  },
+const desktopVideos = [
+  { src: '/desk-1.mp4' },
+  { src: '/desk-2.mp4' },
+  { src: '/desk-3.mp4' },
+  { src: '/desk-4.mp4' },
 ];
 
 export default function Hero() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [autoplay] = useState(() =>
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+    Autoplay({ delay: 6000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -51,7 +42,7 @@ export default function Hero() {
 
   return (
     <section id="home" aria-label="Hero banner" className="hero-section">
-      {/* Desktop / tablet carousel */}
+      {/* Desktop & iPad / Tablet carousel */}
       <div className="hero-desktop">
         <div
           className="hero-embla"
@@ -60,16 +51,15 @@ export default function Hero() {
           onMouseLeave={() => autoplay.play()}
         >
           <div className="hero-embla__container">
-            {banners.map((banner, i) => (
-              <div key={banner.src} className="hero-slide">
-                <Image
-                  src={banner.src}
-                  alt={banner.alt}
-                  width={1920}
-                  height={1080}
-                  priority={i === 0}
-                  sizes="100vw"
-                  className="hero-slide__img"
+            {desktopVideos.map((video) => (
+              <div key={video.src} className="hero-slide">
+                <video
+                  src={video.src}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="hero-slide__video"
                 />
               </div>
             ))}
@@ -79,7 +69,7 @@ export default function Hero() {
         <button
           type="button"
           onClick={scrollPrev}
-          aria-label="Previous banner"
+          aria-label="Previous video"
           className="hero-arrow hero-arrow-prev"
         >
           <span className="hero-arrow__icon">
@@ -89,7 +79,7 @@ export default function Hero() {
         <button
           type="button"
           onClick={scrollNext}
-          aria-label="Next banner"
+          aria-label="Next video"
           className="hero-arrow hero-arrow-next"
         >
           <span className="hero-arrow__icon">
@@ -97,8 +87,8 @@ export default function Hero() {
           </span>
         </button>
 
-        <div role="tablist" aria-label="Banner slides" className="hero-dots">
-          {banners.map((_, i) => (
+        <div role="tablist" aria-label="Video slides" className="hero-dots">
+          {desktopVideos.map((_, i) => (
             <button
               key={i}
               type="button"
@@ -112,16 +102,15 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Mobile: single static banner */}
+      {/* Mobile: single looping video fitted to viewport height */}
       <div className="hero-mobile">
-        <Image
-          src="/mob-banner.png"
-          alt="Enovix digital solutions"
-          width={1080}
-          height={1920}
-          priority
-          sizes="100vw"
-          className="hero-mobile__img"
+        <video
+          src="/mob-1.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="hero-mobile__video"
         />
       </div>
 
@@ -163,7 +152,7 @@ export default function Hero() {
           background: #f8f9fb;
         }
 
-        .hero-slide__img {
+        .hero-slide__video {
           display: block;
           width: 100%;
           height: 100%;
@@ -171,8 +160,8 @@ export default function Hero() {
           object-position: center center;
         }
 
-        /* Tablet / smaller desktop: true 16:9 so artwork never crops */
-        @media (min-width: 769px) and (max-width: 1199px) {
+        /* Tablet / iPad (641px to 1199px): desktop carousel with fitted aspect ratio & shorter side arrows */
+        @media (min-width: 641px) and (max-width: 1199px) {
           .hero-section {
             padding-top: 0;
           }
@@ -182,16 +171,30 @@ export default function Hero() {
             height: auto;
           }
 
-          .hero-slide__img {
-            object-fit: contain;
+          .hero-slide__video {
+            object-fit: cover;
+          }
+
+          .hero-arrow {
+            width: 38px;
+            height: 38px;
+          }
+
+          .hero-arrow-prev { left: 12px; }
+          .hero-arrow-next { right: 12px; }
+
+          .hero-arrow svg {
+            width: 16px;
+            height: 16px;
+          }
+
+          .hero-dots {
+            bottom: 14px;
+            padding: 6px 10px;
           }
         }
 
-        /*
-          Large desktop: edge-to-edge, fills the screen.
-          Nav overlays the white top of the banners (fixed).
-          16:9 art in a 16:9 viewport = no visible crop.
-        */
+        /* Large desktop: edge-to-edge, full screen height */
         @media (min-width: 1200px) {
           .hero-section {
             padding-top: 0;
@@ -202,7 +205,7 @@ export default function Hero() {
             aspect-ratio: auto;
           }
 
-          .hero-slide__img {
+          .hero-slide__video {
             object-fit: cover;
             object-position: center center;
           }
@@ -320,9 +323,11 @@ export default function Hero() {
           transform: none;
         }
 
-        @media (max-width: 768px) {
+        /* Mobile phones (640px and below) */
+        @media (max-width: 640px) {
           .hero-section {
             padding-top: 0;
+            height: 100dvh;
           }
 
           .hero-desktop {
@@ -332,11 +337,15 @@ export default function Hero() {
           .hero-mobile {
             display: block;
             width: 100%;
+            height: 100dvh;
+            overflow: hidden;
           }
 
-          .hero-mobile__img {
+          .hero-mobile__video {
             width: 100%;
-            height: auto;
+            height: 100dvh;
+            object-fit: cover;
+            object-position: center center;
             display: block;
           }
         }
