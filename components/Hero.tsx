@@ -108,6 +108,9 @@ export default function Hero() {
 
   return (
     <section id="home" aria-label="Hero banner" className="hero-section">
+      <h1 className="sr-only">
+        EnovixTech — Digital Product Studio, Web &amp; Mobile App Development
+      </h1>
       {/* Desktop & iPad / Tablet carousel */}
       <div className="hero-desktop">
         <div
@@ -210,13 +213,13 @@ export default function Hero() {
         {/* Content matching mob-1 typography and styling */}
         <div className="hero-mob__content">
           <div className="hero-mob__line hero-mob__line--top" />
-          <h1 className="hero-mob__title">
+          <h2 className="hero-mob__title">
             BUILD
             <br />
             WHAT
             <br />
             MATTERS
-          </h1>
+          </h2>
           <div className="hero-mob__line hero-mob__line--bottom" />
           <p className="hero-mob__subtitle">
             CREATING PRODUCTS THAT

@@ -113,13 +113,13 @@ export default function Navbar() {
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, '#home')}
-            aria-label="Enovix home"
+            aria-label="EnovixTech home"
             style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}
           >
             <motion.div whileHover={{ scale: 1.02 }}>
               <Image
                 src="/enovix_logo.png"
-                alt="Enovix"
+                alt="EnovixTech - Digital Product Studio"
                 width={112}
                 height={32}
                 priority
