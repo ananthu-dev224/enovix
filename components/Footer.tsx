@@ -143,7 +143,7 @@ export default function Footer() {
               <div style={{ marginBottom: 18 }}>
                 <Image
                   src="/enovix_logo.png"
-                  alt="Enovix"
+                  alt="EnovixTech - Enovix Tech"
                   width={140}
                   height={40}
                 />
@@ -159,7 +159,7 @@ export default function Footer() {
                   marginBottom: 24,
                 }}
               >
-                A freelance tech team building world-class web and mobile
+                EnovixTech is a digital product studio crafting world-class web and mobile
                 products. Turning ideas into polished digital experiences.
               </p>
 
@@ -289,7 +289,7 @@ export default function Footer() {
                 flexWrap: 'wrap',
               }}
             >
-              © {new Date().getFullYear()} Enovix. Crafted with
+              © {new Date().getFullYear()} EnovixTech (Enovix Tech). Crafted with
               <Heart
                 size={12}
                 fill="#ec4899"

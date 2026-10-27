@@ -102,7 +102,7 @@ function buildEmailHtml(data: ContactPayload): string {
         <tr>
           <td style="background:#010b18;border-radius:0 0 16px 16px;padding:22px 40px;border:1px solid rgba(42,137,232,0.1);border-top:none;text-align:center;">
             <p style="font-family:sans-serif;font-size:12px;color:#2a4a6a;margin:0;">
-              This email was sent from the contact form at <a href="https://enovix.dev" style="color:#2889e8;text-decoration:none;">enovix.dev</a>
+              This email was sent from the contact form at <a href="https://enovixtech.in" style="color:#2889e8;text-decoration:none;">enovixtech.in</a>
             </p>
           </td>
         </tr>
