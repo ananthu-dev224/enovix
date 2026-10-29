@@ -21,6 +21,19 @@ type DesktopSlide =
       src: string;
     };
 
+type MobileSlide =
+  | {
+      type: 'image';
+      src: string;
+      alt: string;
+      title: React.ReactNode;
+      desc: string;
+    }
+  | {
+      type: 'video';
+      src: string;
+    };
+
 const desktopSlides: DesktopSlide[] = [
   {
     type: 'image',
@@ -67,6 +80,48 @@ const desktopSlides: DesktopSlide[] = [
   },
 ];
 
+const mobileSlides: MobileSlide[] = [
+  {
+    type: 'image',
+    src: '/mobile-1-bgimage.png',
+    alt: 'Android and iOS Apps',
+    title: (
+      <>
+        Android &amp;
+        <br />
+        iOS Apps
+      </>
+    ),
+    desc: 'Scalable mobile solutions built for your business.',
+  },
+  {
+    type: 'image',
+    src: '/mobile-2-bgimage.png',
+    alt: 'Product Engineering',
+    title: <>Product Engineering</>,
+    desc: 'From idea to launch — powerful digital products built for performance.',
+  },
+  {
+    type: 'image',
+    src: '/mobile-3-bgimage.png',
+    alt: 'Business Management Systems',
+    title: (
+      <>
+        Business
+        <br />
+        Management
+        <br />
+        Systems
+      </>
+    ),
+    desc: 'Streamline workflows and improve efficiency.',
+  },
+  {
+    type: 'video',
+    src: '/mobile-4-video.mp4',
+  },
+];
+
 export default function Hero() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [autoplay] = useState(() =>
@@ -105,6 +160,45 @@ export default function Hero() {
       emblaApi.off('reInit', onSelect);
     };
   }, [emblaApi]);
+
+  // Mobile carousel
+  const [mobSelectedIndex, setMobSelectedIndex] = useState(0);
+  const [mobAutoplay] = useState(() =>
+    Autoplay({ delay: 6000, stopOnInteraction: false, stopOnMouseEnter: false })
+  );
+
+  const [mobEmblaRef, mobEmblaApi] = useEmblaCarousel(
+    { loop: true, duration: 30 },
+    [mobAutoplay]
+  );
+
+  const mobScrollPrev = useCallback(() => mobEmblaApi?.scrollPrev(), [mobEmblaApi]);
+  const mobScrollNext = useCallback(() => mobEmblaApi?.scrollNext(), [mobEmblaApi]);
+  const mobScrollTo = useCallback(
+    (index: number) => mobEmblaApi?.scrollTo(index),
+    [mobEmblaApi]
+  );
+
+  useEffect(() => {
+    if (!mobEmblaApi) return;
+    const onSelect = () => {
+      const idx = mobEmblaApi.selectedScrollSnap();
+      setMobSelectedIndex(idx);
+      if (mobileSlides[idx]?.type === 'video') {
+        const video = document.querySelector<HTMLVideoElement>('.mob-slide__video');
+        if (video) {
+          video.play().catch(() => {});
+        }
+      }
+    };
+    mobEmblaApi.on('select', onSelect);
+    mobEmblaApi.on('reInit', onSelect);
+    onSelect();
+    return () => {
+      mobEmblaApi.off('select', onSelect);
+      mobEmblaApi.off('reInit', onSelect);
+    };
+  }, [mobEmblaApi]);
 
   return (
     <section id="home" aria-label="Hero banner" className="hero-section">
@@ -199,46 +293,85 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Mobile: clean standalone hero replacing mob-1.mp4 video */}
+      {/* Mobile carousel (640px and below) */}
       <div className="hero-mobile">
-        {/* Subtle ambient lighting & cyber mesh background */}
-        <div className="hero-mob__bg" aria-hidden="true">
-          <div className="hero-mob__glow hero-mob__glow--top" />
-          <div className="hero-mob__glow hero-mob__glow--center" />
-          <div className="hero-mob__glow hero-mob__glow--bottom" />
-          <div className="hero-mob__grid" />
-          <div className="hero-mob__particles" />
-        </div>
-
-        {/* Content matching mob-1 typography and styling */}
-        <div className="hero-mob__content">
-          <div className="hero-mob__line hero-mob__line--top" />
-          <h2 className="hero-mob__title">
-            BUILD
-            <br />
-            WHAT
-            <br />
-            MATTERS
-          </h2>
-          <div className="hero-mob__line hero-mob__line--bottom" />
-          <p className="hero-mob__subtitle">
-            CREATING PRODUCTS THAT
-            <br />
-            SOLVE REAL BUSINESS NEEDS
-          </p>
-        </div>
-
-        {/* Scroll indicator */}
-        {/* <a
-          href="#services"
-          className="hero-mob__scroll-hint"
-          aria-label="Scroll to services"
+        <div
+          className="mob-embla"
+          ref={mobEmblaRef}
         >
-          <span className="hero-mob__scroll-mouse">
-            <span className="hero-mob__scroll-wheel" />
+          <div className="mob-embla__container">
+            {mobileSlides.map((slide, i) => (
+              <div
+                key={i}
+                className={`mob-slide${i === mobSelectedIndex ? ' is-active' : ''}`}
+              >
+                {slide.type === 'image' ? (
+                  <>
+                    <Image
+                      src={slide.src}
+                      alt={slide.alt}
+                      fill
+                      priority={i === 0}
+                      sizes="100vw"
+                      className="mob-slide__img"
+                    />
+                    <div className="mob-slide__text">
+                      <h2 className="mob-slide__title">{slide.title}</h2>
+                      <p className="mob-slide__desc">{slide.desc}</p>
+                    </div>
+                  </>
+                ) : (
+                  <video
+                    src={slide.src}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    className="mob-slide__video"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile arrow buttons */}
+        <button
+          type="button"
+          onClick={mobScrollPrev}
+          aria-label="Previous slide"
+          className="mob-arrow mob-arrow-prev"
+        >
+          <span className="mob-arrow__icon">
+            <ArrowLeft size={16} strokeWidth={2.25} />
           </span>
-          <span className="hero-mob__scroll-text">SCROLL</span>
-        </a> */}
+        </button>
+        <button
+          type="button"
+          onClick={mobScrollNext}
+          aria-label="Next slide"
+          className="mob-arrow mob-arrow-next"
+        >
+          <span className="mob-arrow__icon">
+            <ArrowRight size={16} strokeWidth={2.25} />
+          </span>
+        </button>
+
+        {/* Mobile dots */}
+        <div role="tablist" aria-label="Mobile hero slides" className="mob-dots">
+          {mobileSlides.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              role="tab"
+              aria-selected={i === mobSelectedIndex}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => mobScrollTo(i)}
+              className={`mob-dot${i === mobSelectedIndex ? ' is-active' : ''}`}
+            />
+          ))}
+        </div>
       </div>
 
       <style>{`
@@ -537,11 +670,10 @@ export default function Hero() {
           transform: none;
         }
 
-        /* Mobile phones (640px and below) */
+        /* ── Mobile carousel (640px and below) ── */
         @media (max-width: 640px) {
           .hero-section {
             padding-top: 0;
-            height: 100dvh;
             background: #06080e;
           }
 
@@ -551,207 +683,170 @@ export default function Hero() {
 
           .hero-mobile {
             position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            display: block;
             width: 100%;
-            height: 100dvh;
-            overflow: hidden;
-            padding: 72px 24px 32px;
             background: #06080e;
           }
 
-          .hero-mob__bg {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
+          /* Embla wrapper */
+          .mob-embla {
+            overflow: hidden;
+            width: 100%;
+          }
+
+          .mob-embla__container {
+            display: flex;
+            width: 100%;
+          }
+
+          /* Each slide: relative container so text can overlay the image */
+          .mob-slide {
+            flex: 0 0 100%;
+            min-width: 0;
+            width: 100%;
+            position: relative;
+            height: 100dvh;
+            background: #06080e;
             overflow: hidden;
           }
 
-          .hero-mob__grid {
+          /* Image as full background — uses Next.js fill */
+          .mob-slide__img {
+            object-fit: cover;
+            object-position: center center;
+            user-select: none;
+            -webkit-user-drag: none;
+          }
+
+          /* Video slide: full-screen height */
+          .mob-slide__video {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+          }
+
+          /* Text: absolute, sitting ON the bg image at the bottom */
+          .mob-slide__text {
             position: absolute;
-            inset: 0;
-            background-image:
-              linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-            background-size: 32px 32px;
-            mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-          }
-
-          .hero-mob__glow {
-            position: absolute;
-            border-radius: 9999px;
-            filter: blur(65px);
-            pointer-events: none;
-          }
-
-          .hero-mob__glow--top {
-            top: 10%;
-            left: 5%;
-            width: 200px;
-            height: 200px;
-            background: rgba(26, 111, 196, 0.28);
-          }
-
-          .hero-mob__glow--center {
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 260px;
-            height: 260px;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.2) 0%, rgba(26, 111, 196, 0.12) 60%, transparent 80%);
-            animation: heroPulse 5s ease-in-out infinite alternate;
-          }
-
-          .hero-mob__glow--bottom {
-            bottom: 5%;
-            right: 5%;
-            width: 220px;
-            height: 220px;
-            background: rgba(30, 58, 138, 0.24);
-          }
-
-          .hero-mob__particles {
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(rgba(0, 229, 255, 0.28) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.5;
-          }
-
-          @keyframes heroPulse {
-            0% {
-              opacity: 0.55;
-              transform: translate(-50%, -50%) scale(0.92);
-            }
-            100% {
-              opacity: 1;
-              transform: translate(-50%, -50%) scale(1.18);
-            }
-          }
-
-          .hero-mob__content {
-            position: relative;
-            z-index: 2;
+            bottom: 72px;
+            left: 0;
+            right: 0;
+            padding: 0 24px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            max-width: 320px;
-            margin: auto 0;
+            align-items: flex-start;
+            z-index: 2;
           }
 
-          .hero-mob__line {
-            width: 60px;
-            height: 3px;
-            background: #00e5ff;
-            border-radius: 2px;
-            box-shadow:
-              0 0 12px rgba(0, 229, 255, 0.8),
-              0 0 24px rgba(0, 229, 255, 0.4);
-            animation: heroLineGlow 3s ease-in-out infinite alternate;
-          }
-
-          .hero-mob__line--top {
-            margin-bottom: 24px;
-          }
-
-          .hero-mob__line--bottom {
-            margin-top: 24px;
-            margin-bottom: 24px;
-          }
-
-          @keyframes heroLineGlow {
-            0% {
-              box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
-              width: 50px;
-            }
-            100% {
-              box-shadow: 0 0 22px rgba(0, 229, 255, 0.95), 0 0 32px rgba(0, 229, 255, 0.45);
-              width: 72px;
-            }
-          }
-
-          .hero-mob__title {
+          .mob-slide__title {
             font-family: 'Syne', sans-serif;
-            font-size: 2.75rem;
             font-weight: 800;
-            line-height: 1.08;
-            letter-spacing: 0.08em;
+            font-size: 2rem;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
             color: #ffffff;
-            text-transform: uppercase;
+            margin: 0 0 10px;
             text-shadow:
-              0 2px 20px rgba(0, 0, 0, 0.8),
-              0 0 40px rgba(26, 111, 196, 0.35);
-            margin: 0;
+              0 2px 12px rgba(0, 0, 0, 0.75),
+              0 1px 3px rgba(0, 0, 0, 0.5);
           }
 
-          .hero-mob__subtitle {
+          .mob-slide__desc {
             font-family: 'DM Sans', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 500;
-            line-height: 1.6;
-            letter-spacing: 0.16em;
-            color: rgba(255, 255, 255, 0.78);
-            text-transform: uppercase;
+            font-weight: 400;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
             margin: 0;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
           }
 
-          .hero-mob__scroll-hint {
-            position: relative;
-            z-index: 2;
+          /* Entrance animation for active slide text */
+          @keyframes mobTextReveal {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+
+          .mob-slide.is-active .mob-slide__title {
+            animation: mobTextReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+          }
+
+          .mob-slide.is-active .mob-slide__desc {
+            animation: mobTextReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+          }
+
+          /* Arrow buttons — vertically centred over the image */
+          .mob-arrow {
+            position: absolute;
+            top: 35%;
+            translate: 0 -50%;
+            z-index: 3;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(17, 24, 39, 0.52);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #ffffff;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition:
+              background 0.25s ease,
+              transform 0.25s ease;
+          }
+
+          .mob-arrow__icon {
+            display: grid;
+            place-items: center;
+          }
+
+          .mob-arrow-prev { left: 12px; }
+          .mob-arrow-next { right: 12px; }
+
+          .mob-arrow:active {
+            transform: scale(0.92);
+            background: var(--blue-accent);
+          }
+
+          /* Dots — sit inside the image over the gradient scrim */
+          .mob-dots {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
             display: flex;
-            flex-direction: column;
+            gap: 7px;
             align-items: center;
-            gap: 6px;
-            margin-top: auto;
-            margin-bottom: 12px;
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.45);
-            transition: color 0.25s ease;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(17, 24, 39, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
           }
 
-          .hero-mob__scroll-hint:hover {
-            color: #00e5ff;
+          .mob-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.32);
+            transition:
+              width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.22s ease;
           }
 
-          .hero-mob__scroll-mouse {
+          .mob-dot.is-active {
             width: 20px;
-            height: 32px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            padding-top: 5px;
-          }
-
-          .hero-mob__scroll-wheel {
-            width: 3px;
-            height: 6px;
-            background: #00e5ff;
-            border-radius: 99px;
-            animation: heroWheel 1.8s infinite;
-          }
-
-          @keyframes heroWheel {
-            0% {
-              opacity: 1;
-              transform: translateY(0);
-            }
-            100% {
-              opacity: 0;
-              transform: translateY(10px);
-            }
-          }
-
-          .hero-mob__scroll-text {
-            font-size: 0.65rem;
-            letter-spacing: 0.18em;
-            font-weight: 500;
-            text-transform: uppercase;
+            background: var(--blue-accent);
           }
         }
       `}</style>
