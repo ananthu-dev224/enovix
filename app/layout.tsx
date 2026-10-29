@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     'React Nextjs agency',
     'custom business software',
     'Medrec-Q Dictate',
+    'Medrec-Q Mini',
     'DMS dictation platform',
   ],
   referrer: 'origin-when-cross-origin',

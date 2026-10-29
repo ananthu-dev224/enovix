@@ -2,11 +2,11 @@
 
 import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const categories = ['All', 'Web', 'Android', 'iOS'];
+const categories = ['All', 'Web', 'Desktop', 'Android', 'iOS'];
 
 const projects = [
   {
@@ -38,7 +38,7 @@ const projects = [
   {
     id: 3,
     title: 'Medrec-Q Desktop Dictation',
-    category: 'Web',
+    category: 'Desktop',
     tags: ['Electron.js', 'Floating Recorder', 'Medical Dictation', 'Cross-Platform'],
     description:
       'A cross-platform desktop dictation app built with Electron.js for medical professionals. The app features a floating always-on-top recorder that works seamlessly over other applications.',
@@ -49,12 +49,28 @@ const projects = [
     link: '',
   },
   {
+    id: 4,
+    title: 'Medrec-Q Mini',
+    category: 'Desktop',
+    tags: ['AI Reporting', 'Realtime AI', 'Vision OCR', 'Structured Reports', 'Floating Desktop App'],
+    description:
+      'An intelligent desktop application designed to float seamlessly over EHRs and other clinical software. Features real-time AI text reporting, virtual reporting with AI-driven image OCR, and automated structured report generation for rapid medical documentation.',
+    year: '2026',
+    image: '/medrecq-mini-1.png',
+    imageWidth: 439,
+    imageHeight: 417,
+    extraImage: '/medrecq-mini-2.png',
+    extraImageWidth: 435,
+    extraImageHeight: 440,
+    link: '',
+  },
+  {
     id: 5,
     title: 'DMS',
     category: 'Web',
     tags: ['React.js', 'Node.js', 'AssemblyAI', 'Footpedal Support', 'Role-Based Access'],
     description:
-      'A web-based dictation platform with role-based access, AssemblyAI transcription, integrated footpedal support, rich text editing, report review, and seamless submission. A refinement layer uses saved user profiles so transcriptions are tailored and improved from each user’s data.',
+      'A web-based dictation platform with role-based access, AssemblyAI transcription, integrated footpedal support, rich text editing, report review, and seamless submission. A refinement layer uses saved user profiles so transcriptions are tailored and improved from each userâ€™s data.',
     year: '2026',
     image: '/dms.png',
     imageWidth: 1883,
@@ -62,6 +78,70 @@ const projects = [
     link: 'https://dms.medrecq.com/',
   },
 ];
+
+function ImageCarousel({
+  images,
+  title,
+}: {
+  images: { src: string; width: number; height: number }[];
+  title: string;
+}) {
+  const [current, setCurrent] = useState(0);
+  const prev = () => setCurrent((c) => (c - 1 + images.length) % images.length);
+  const next = () => setCurrent((c) => (c + 1) % images.length);
+
+  return (
+    <div className="carousel-root">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -40 }}
+          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          className="carousel-slide"
+        >
+          <Image
+            src={images[current].src}
+            alt={`${title} — ${current + 1}`}
+            width={images[current].width}
+            height={images[current].height}
+            sizes="(max-width: 768px) 90vw, 45vw"
+            className="carousel-img"
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Nav arrows */}
+      <button
+        onClick={prev}
+        className="carousel-btn carousel-btn-left"
+        aria-label="Previous image"
+      >
+        <ChevronLeft size={18} />
+      </button>
+      <button
+        onClick={next}
+        className="carousel-btn carousel-btn-right"
+        aria-label="Next image"
+      >
+        <ChevronRight size={18} />
+      </button>
+
+      {/* Dots */}
+      <div className="carousel-dots">
+        {images.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`carousel-dot${i === current ? ' carousel-dot-active' : ''}`}
+            aria-label={`Go to image ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function ProjectCard({
   project,
@@ -144,16 +224,30 @@ function ProjectCard({
         {/* Right Column: Image Preview */}
         <div className="project-card-image-wrapper">
           <div className="project-card-image-gradient">
-            <div className="project-card-image-container">
-              <Image
-                src={project.image}
-                alt={project.title}
-                width={project.imageWidth}
-                height={project.imageHeight}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="project-card-image"
+            {'extraImage' in project && project.extraImage ? (
+              <ImageCarousel
+                images={[
+                  { src: project.image, width: project.imageWidth, height: project.imageHeight },
+                  {
+                    src: project.extraImage,
+                    width: 'extraImageWidth' in project && project.extraImageWidth ? project.extraImageWidth : 435,
+                    height: 'extraImageHeight' in project && project.extraImageHeight ? project.extraImageHeight : 440,
+                  },
+                ]}
+                title={project.title}
               />
-            </div>
+            ) : (
+              <div className="project-card-image-container">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  width={project.imageWidth}
+                  height={project.imageHeight}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="project-card-image"
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -226,6 +320,7 @@ export default function Works() {
             <div
               role="tablist"
               aria-label="Filter projects"
+              className="works-tablist"
               style={{
                 display: 'flex',
                 gap: 4,
@@ -233,6 +328,8 @@ export default function Works() {
                 borderRadius: 12,
                 background: 'var(--bg-secondary)',
                 border: '1px solid var(--border)',
+                maxWidth: '100%',
+                overflowX: 'auto',
               }}
             >
               {categories.map((cat) => {
@@ -361,7 +458,7 @@ export default function Works() {
               fontWeight: 600,
             }}
           >
-            Have a project in mind? →
+            Have a project in mind? â†’
           </a>
         </motion.div>
       </div>
@@ -405,7 +502,8 @@ export default function Works() {
 
         @media (min-width: 1024px) {
           .project-card-content {
-            padding: 44px 48px;
+            padding: 44px 44px;
+            flex: 1;
           }
         }
 
@@ -496,7 +594,7 @@ export default function Works() {
         .project-card-image-wrapper {
           flex: 1;
           position: relative;
-          min-height: 240px;
+          min-height: 320px;
           overflow: hidden;
           order: -1;
           display: flex;
@@ -507,6 +605,7 @@ export default function Works() {
             min-height: 100%;
             align-self: stretch;
             order: 0;
+            flex: 1.25;
           }
         }
 
@@ -518,15 +617,16 @@ export default function Works() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 20px;
+          padding: 24px;
         }
 
         @media (min-width: 1024px) {
           .project-card-image-gradient {
-            padding: 44px;
+            padding: 28px 32px;
           }
         }
 
+        /* Single image container */
         .project-card-image-container {
           position: relative;
           width: 100%;
@@ -556,41 +656,154 @@ export default function Works() {
           filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.12));
         }
 
+        /* Carousel for dual-image projects */
+        .carousel-root {
+          position: relative;
+          width: 100%;
+          height: 360px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .carousel-slide {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 44px; /* room for arrows */
+        }
+
+        .carousel-img {
+          width: auto !important;
+          height: 100% !important;
+          max-width: 100%;
+          max-height: 320px;
+          object-fit: contain;
+          object-position: center center;
+          border-radius: 12px;
+          filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.12));
+          transition: filter 0.4s ease;
+        }
+
+        .project-card:hover .carousel-img {
+          filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.18));
+        }
+
+        .carousel-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          border: 1px solid var(--blue-soft-border);
+          background: rgba(255, 255, 255, 0.9);
+          color: var(--blue-accent);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          backdrop-filter: blur(6px);
+          transition: background 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+          opacity: 0;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .project-card:hover .carousel-btn {
+          opacity: 1;
+        }
+
+        .carousel-btn:hover {
+          background: var(--blue-accent);
+          color: #fff;
+          box-shadow: 0 4px 14px rgba(26, 111, 196, 0.35);
+        }
+
+        .carousel-btn-left  { left: 8px; }
+        .carousel-btn-right { right: 8px; }
+
+        .carousel-dots {
+          position: absolute;
+          bottom: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 6px;
+          z-index: 10;
+        }
+
+        .carousel-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          border: none;
+          background: rgba(26, 111, 196, 0.25);
+          cursor: pointer;
+          transition: background 0.25s ease, transform 0.25s ease;
+          padding: 0;
+        }
+
+        .carousel-dot-active {
+          background: var(--blue-accent);
+          transform: scale(1.35);
+        }
+
+        @media (max-width: 768px) {
+          .carousel-btn {
+            width: 30px;
+            height: 30px;
+            opacity: 1;
+          }
+          .carousel-btn-left  { left: 4px; }
+          .carousel-btn-right { right: 4px; }
+
+          .carousel-root {
+            height: 280px;
+          }
+
+          .carousel-img {
+            max-height: 240px;
+          }
+        }
+
         @media (max-width: 768px) {
           .project-card-image-wrapper {
             flex: none;
             width: 100%;
-            min-height: 0;
-            height: auto;
+            min-height: 300px;
+            height: 300px;
             overflow: hidden;
           }
 
           .project-card-image-gradient {
-            height: auto;
-            min-height: 0;
-            padding: 0;
-            display: block;
+            height: 300px;
+            min-height: 300px;
+            padding: 16px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: var(--bg-secondary);
           }
 
           .project-card-image-container {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             height: auto;
             min-height: 0;
           }
 
-          .project-card:hover .project-card-image-container {
-            transform: none;
-          }
-
           .project-card-image,
           .project-card:hover .project-card-image {
-            display: block;
-            width: 100% !important;
+            width: auto !important;
             height: auto !important;
             max-width: 100%;
-            max-height: none;
+            max-height: 300px;
             object-fit: contain;
             object-position: center center;
             filter: none;
@@ -599,6 +812,22 @@ export default function Works() {
 
         .project-card-wrapper {
           position: relative;
+        }
+
+        .works-tablist {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .works-tablist::-webkit-scrollbar {
+          display: none;
+        }
+
+        @media (max-width: 640px) {
+          .works-tablist button {
+            padding: 7px 12px !important;
+            white-space: nowrap;
+          }
         }
 
         @media (min-width: 1024px) {
