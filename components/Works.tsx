@@ -66,6 +66,19 @@ const projects = [
   },
   {
     id: 5,
+    title: 'Vivekanandayogakendram',
+    category: 'Web',
+    tags: ['Online Programs', 'E-Commerce', 'Workshops', 'Yoga', 'Wix Studio'],
+    description:
+      'A full-featured yoga website for Vivekananda Yoga Kendram offering online program sales, an e-commerce store, workshop registrations, and a rich content experience for yoga practitioners and seekers.',
+    year: '2025',
+    image: '/vyk-website.png',
+    imageWidth: 1920,
+    imageHeight: 1080,
+    link: 'https://www.vivekanandayogakendram.in/',
+  },
+  {
+    id: 6,
     title: 'DMS',
     category: 'Web',
     tags: ['React.js', 'Node.js', 'AssemblyAI', 'Footpedal Support', 'Role-Based Access'],
