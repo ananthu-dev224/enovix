@@ -37,7 +37,7 @@ type MobileSlide =
 const desktopSlides: DesktopSlide[] = [
   {
     type: 'image',
-    src: '/desk-1-bgimage.png',
+    src: '/desk-1-bgimage-latest.png',
     alt: 'Android and iOS Apps',
     title: (
       <>
@@ -51,7 +51,7 @@ const desktopSlides: DesktopSlide[] = [
   },
   {
     type: 'image',
-    src: '/desk-2-bgimage.png',
+    src: '/desk-2-bgimage-latest.png',
     alt: 'Product Engineering',
     title: <>Product Engineering</>,
     desc: 'From idea to launch, we engineer powerful digital products. Built for performance, scalability, and long-term growth.',
@@ -59,15 +59,15 @@ const desktopSlides: DesktopSlide[] = [
   },
   {
     type: 'image',
-    src: '/desk-3-bgimage.png',
+    src: '/desk-3-bgimage-latest.png',
     alt: 'Business Management Systems',
     title: (
       <>
-        BUSINESS
+        Business
         <br />
-        MANAGEMENT
+        Management
         <br />
-        SYSTEMS
+        Systems
       </>
     ),
     desc: 'Streamline workflows, manage operations, and improve efficiency.',
@@ -75,15 +75,19 @@ const desktopSlides: DesktopSlide[] = [
     stackedTitle: true,
   },
   {
-    type: 'video',
-    src: '/desk-4.mp4',
+    type: 'image',
+    src: '/desk-4-bgimage-latest.png',
+    alt: 'Future AI',
+    title: <>Future AI</>,
+    desc: 'AI integrated into your systems — intelligent automation, custom machine learning models, and real-time data insights engineered to scale your business.',
+    align: 'right',
   },
 ];
 
 const mobileSlides: MobileSlide[] = [
   {
     type: 'image',
-    src: '/mobile-1-bgimage.png',
+    src: '/mobile-1-bgimage-latest.png',
     alt: 'Android and iOS Apps',
     title: (
       <>
@@ -96,14 +100,14 @@ const mobileSlides: MobileSlide[] = [
   },
   {
     type: 'image',
-    src: '/mobile-2-bgimage.png',
+    src: '/mobile-2-bgimage-latest.png',
     alt: 'Product Engineering',
     title: <>Product Engineering</>,
     desc: 'From idea to launch — powerful digital products built for performance.',
   },
   {
     type: 'image',
-    src: '/mobile-3-bgimage.png',
+    src: '/mobile-3-bgimage-latest.png',
     alt: 'Business Management Systems',
     title: (
       <>
@@ -117,8 +121,11 @@ const mobileSlides: MobileSlide[] = [
     desc: 'Streamline workflows and improve efficiency.',
   },
   {
-    type: 'video',
-    src: '/mobile-4-video.mp4',
+    type: 'image',
+    src: '/mobile-4-bgimage-latest.png',
+    alt: 'Future AI',
+    title: <>Future AI</>,
+    desc: 'AI integrated into your systems — intelligent automation and data-driven solutions built to scale.',
   },
 ];
 
@@ -447,10 +454,10 @@ export default function Hero() {
         }
 
         .hero-content--right {
-          left: clamp(50%, 53vw, 56%);
-          max-width: min(580px, 44vw);
+          left: calc(clamp(50%, 53vw, 56%) + 40px);
+          max-width: min(560px, 42vw);
           text-align: left;
-          padding-right: clamp(24px, 4vw, 60px);
+          padding-right: clamp(16px, 3vw, 40px);
         }
 
         .hero-content__title {
@@ -459,29 +466,25 @@ export default function Hero() {
           font-size: clamp(2.2rem, 4.2vw, 4.2rem);
           line-height: 1.08;
           letter-spacing: -0.02em;
-          color: #ffffff;
-          text-shadow:
-            0 4px 28px rgba(0, 0, 0, 0.6),
-            0 1px 4px rgba(0, 0, 0, 0.45);
+          color: #111827;
           margin: 0;
         }
 
         .hero-content__title--stacked {
-          font-weight: 900;
+          font-weight: 800;
           font-size: clamp(2rem, 3.8vw, 3.8rem);
-          letter-spacing: 0.03em;
-          line-height: 1.05;
-          text-transform: uppercase;
+          letter-spacing: -0.01em;
+          line-height: 1.08;
+          text-transform: none;
         }
 
         .hero-content__desc {
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 400;
+          font-family: 'Poppins', sans-serif;
+          font-weight: 500;
           font-size: clamp(1rem, 1.35vw, 1.25rem);
           line-height: 1.55;
-          color: rgba(255, 255, 255, 0.88);
+          color: #2563eb;
           margin-top: clamp(14px, 1.8vw, 24px);
-          text-shadow: 0 2px 14px rgba(0, 0, 0, 0.6);
           max-width: 480px;
         }
 
@@ -522,7 +525,7 @@ export default function Hero() {
           }
 
           .hero-content--right {
-            left: clamp(50%, 52vw, 55%);
+            left: calc(clamp(50%, 52vw, 55%) + 40px);
             max-width: 44vw;
             padding-right: 20px;
           }
@@ -705,7 +708,7 @@ export default function Hero() {
             min-width: 0;
             width: 100%;
             position: relative;
-            height: 100dvh;
+            height: clamp(550px, 80dvh, 680px);
             background: #06080e;
             overflow: hidden;
           }
@@ -730,10 +733,10 @@ export default function Hero() {
           /* Text: absolute, sitting ON the bg image at the bottom */
           .mob-slide__text {
             position: absolute;
-            bottom: 72px;
+            bottom: 58px;
             left: 0;
             right: 0;
-            padding: 0 24px;
+            padding: 0 20px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -743,24 +746,20 @@ export default function Hero() {
           .mob-slide__title {
             font-family: 'Syne', sans-serif;
             font-weight: 800;
-            font-size: 2rem;
-            line-height: 1.1;
+            font-size: 1.85rem;
+            line-height: 1.12;
             letter-spacing: -0.01em;
-            color: #ffffff;
-            margin: 0 0 10px;
-            text-shadow:
-              0 2px 12px rgba(0, 0, 0, 0.75),
-              0 1px 3px rgba(0, 0, 0, 0.5);
+            color: #111827;
+            margin: 0 0 8px;
           }
 
           .mob-slide__desc {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 400;
-            font-size: 1rem;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            line-height: 1.45;
+            color: #111827;
             margin: 0;
-            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.65);
           }
 
           /* Entrance animation for active slide text */
@@ -780,7 +779,7 @@ export default function Hero() {
           /* Arrow buttons — vertically centred over the image */
           .mob-arrow {
             position: absolute;
-            top: 35%;
+            top: 42%;
             translate: 0 -50%;
             z-index: 3;
             width: 36px;
@@ -816,7 +815,7 @@ export default function Hero() {
           /* Dots — sit inside the image over the gradient scrim */
           .mob-dots {
             position: absolute;
-            bottom: 14px;
+            bottom: 12px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 3;

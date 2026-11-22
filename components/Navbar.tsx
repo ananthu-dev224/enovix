@@ -80,6 +80,7 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className={solid ? 'nav-solid' : 'nav-transparent'}
         style={{
           position: 'fixed',
           top: 0,
@@ -136,29 +137,30 @@ export default function Navbar() {
               gap: '8px',
             }}
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`nav-underline${activeLink === link.href ? ' active' : ''}`}
-                style={{
-                  textDecoration: 'none',
-                  padding: '8px 12px',
-                  fontFamily: 'DM Sans, sans-serif',
-                  fontSize: '0.9rem',
-                  fontWeight: activeLink === link.href ? 600 : 500,
-                  color: solid
-                    ? activeLink === link.href
-                      ? 'var(--blue-accent)'
-                      : 'var(--text-secondary)'
-                    : '#ffffff',
-                  transition: 'color 0.2s ease',
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeLink === link.href;
+              const linkColor = isActive ? '#0d47a1' : 'var(--blue-accent)';
+
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`nav-underline${isActive ? ' active' : ''}`}
+                  style={{
+                    textDecoration: 'none',
+                    padding: '8px 12px',
+                    fontFamily: 'DM Sans, sans-serif',
+                    fontSize: '0.9rem',
+                    fontWeight: isActive ? 700 : 500,
+                    color: linkColor,
+                    transition: 'color 0.2s ease',
+                  }}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
 
             <motion.a
               href="#contact"
@@ -187,9 +189,9 @@ export default function Navbar() {
               border: '1px solid var(--border)',
               borderRadius: '10px',
               cursor: 'pointer',
-              color: solid ? 'var(--text-primary)' : '#ffffff',
+              color: 'var(--blue-accent)',
               padding: '6px',
-              borderColor: solid ? 'var(--border)' : 'rgba(255, 255, 255, 0.3)',
+              borderColor: 'var(--border)',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
@@ -215,39 +217,39 @@ export default function Navbar() {
               }}
             >
               <div style={{ padding: '8px 0 24px', maxHeight: 'calc(100vh - 56px)', overflowY: 'auto' }}>
-                {navLinks.map((link, i) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    style={{
-                      display: 'block',
-                      padding: '14px 20px',
-                      textDecoration: 'none',
-                      fontFamily: 'Syne, sans-serif',
-                      fontWeight: 600,
-                      fontSize: '1rem',
-                      lineHeight: 1.4,
-                      color:
-                        activeLink === link.href
-                          ? 'var(--blue-accent)'
-                          : 'var(--text-primary)',
-                      borderLeft:
-                        activeLink === link.href
-                          ? '3px solid var(--blue-accent)'
+                {navLinks.map((link, i) => {
+                  const isActive = activeLink === link.href;
+                  return (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      onClick={(e) => handleNavClick(e, link.href)}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      style={{
+                        display: 'block',
+                        padding: '14px 20px',
+                        textDecoration: 'none',
+                        fontFamily: 'Syne, sans-serif',
+                        fontWeight: isActive ? 700 : 600,
+                        fontSize: '1rem',
+                        lineHeight: 1.4,
+                        color: isActive
+                          ? '#0d47a1'
+                          : 'var(--blue-accent)',
+                        borderLeft: isActive
+                          ? '3px solid #0d47a1'
                           : '3px solid transparent',
-                      background:
-                        activeLink === link.href
-                          ? 'var(--blue-soft)'
+                        background: isActive
+                          ? 'rgba(13, 71, 161, 0.08)'
                           : 'transparent',
-                    }}
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+                      }}
+                    >
+                      {link.label}
+                    </motion.a>
+                  );
+                })}
                 <div style={{ padding: '16px 20px 0' }}>
                   <a
                     href="#contact"
@@ -265,6 +267,12 @@ export default function Navbar() {
       </motion.nav>
 
       <style>{`
+        .nav-underline:hover {
+          color: #0d47a1 !important;
+        }
+        .nav-underline.active::after {
+          background: #0d47a1 !important;
+        }
         @media (max-width: 640px) {
           .desktop-nav { display: none !important; }
           .mobile-menu-btn { display: flex !important; }
